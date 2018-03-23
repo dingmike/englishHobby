@@ -14,8 +14,8 @@ var config = {
         uri: process.env.MONGO_URL || 'mongodb://127.0.0.1/hobbydb'
     },
     porthttp: process.env.PORT || 3311,
-    multicore: false,
-    https: true,
+    multicore: true, // 多线程运行
+    https: false,
     debug: false
 }
 module.exports = config;
