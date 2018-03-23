@@ -1,5 +1,5 @@
 module.exports = function(app, express, io) {
-    var controllers = require('../controllers');
+    let controllers = require('../controllers');
     app.route('/').get(function(req, res) {
         res.render('client');
     });
@@ -8,21 +8,21 @@ module.exports = function(app, express, io) {
         res.header("Access-Control-Allow-Origin", "*");
         res.header('Access-Control-Allow-Methods', 'OPTIONS,GET,POST,PUT,DELETE');
         res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
-        if ('OPTIONS' == req.method) {
+        if ('OPTIONS' === req.method) {
             return res.sendStatus(200);
         }
         if (req.secure) {
             return next();
-        };
+        }
     });
-    var fs = require('fs')
-    var walk = function(path) {
+    let fs = require('fs');
+    let walk = function(path) {
         fs.readdirSync(path).forEach(function(file) {
-            var newPath = path + '/' + file;
-            var stat = fs.statSync(newPath);
+            let newPath = path + '/' + file;
+            let stat = fs.statSync(newPath);
             if (stat.isFile()) {
                 if (/(.*)\.(js|coffee)/.test(file)) {
-                    if (file != 'index.js') {
+                    if (file !== 'index.js') {
                         require(newPath)(app, express, controllers);
                     }
                 }
@@ -31,7 +31,7 @@ module.exports = function(app, express, io) {
             }
         });
     };
-    var models_path = __dirname;
+    let models_path = __dirname;
     walk(models_path);
     io.use(function(socket, next) {
         if (!io.nicknames){
@@ -45,13 +45,13 @@ module.exports = function(app, express, io) {
     });
     // socket events
     io.on('connection', function (socket) {
-        var headers = socket.handshake.headers;
+        let headers = socket.handshake.headers;
         //console.log(headers);
         socket.on('event', function(data, fn) {
             controllers[data.c][data.f](io,socket,data.data,fn);
         });
         socket.on('disconnect', function () {
-            var data={
+            let data={
                 c:'chat',
                 f:'disconnect'
             }

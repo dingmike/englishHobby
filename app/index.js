@@ -81,9 +81,9 @@
         var server = https.createServer(options, app);
 
         if (config.multicore) {
-// use node socket clouster
+        // use node socket clouster
             var redis = require('socket.io-redis');
-            console.log('start connecting to redis.........')
+            console.log('start connecting to redis.........');
             io.adapter(redis({host: 'localhost', port: 6379}));
         }
         io.attach(server);

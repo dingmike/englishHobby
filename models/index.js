@@ -1,10 +1,10 @@
 
 module.exports = function(mongoose) {
-    var fs = require('fs')
-    var walk = function(path) {
+    let fs = require('fs')
+    let walk = function(path) {
         fs.readdirSync(path).forEach(function(file) {
-            var newPath = path + '/' + file;
-            var stat = fs.statSync(newPath);
+            let newPath = path + '/' + file;
+            let stat = fs.statSync(newPath);
             if (stat.isFile()) {
                 if (/(.*)\.(js|coffee)/.test(file)) {
                     if (file != 'index.js') {
@@ -16,6 +16,6 @@ module.exports = function(mongoose) {
             }
         });
     };
-    var models_path = __dirname;
+    let models_path = __dirname;
     walk(models_path);
 }
