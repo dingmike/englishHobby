@@ -4,7 +4,7 @@
   let config = require('./config.js');
   let runServer = () => {
       require('./app')(process.cwd(), config, app => {
-        app.listen(config.porthttp)
+        app.listen(config.porthttp) //  server监听端口
       });
   };
   if (config.multicore) {

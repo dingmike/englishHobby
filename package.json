@@ -28,6 +28,7 @@
     "mongoose": "^5.0.1",
     "mongoose-unique-validator": "^2.0.0",
     "morgan": "^1.9.0",
+    "multer": "^0.1.8",
     "pug": "^2.0.3",
     "redis": "^2.8.0",
     "request": "^2.85.0",

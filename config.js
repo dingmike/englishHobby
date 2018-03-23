@@ -1,5 +1,5 @@
 
-var config = {
+let config = {
     db: {
         options: {
             // db: {native_parser: true}, // 过时不适用
@@ -14,8 +14,9 @@ var config = {
         uri: process.env.MONGO_URL || 'mongodb://127.0.0.1/hobbydb'
     },
     porthttp: process.env.PORT || 3311,
+    SSLPORT: 18081,
     multicore: false, // 多线程运行
-    https: false,
+    https: true,
     debug: false
-}
+};
 module.exports = config;

@@ -6,12 +6,13 @@
         moment = require('moment'),
         app = express(),
         bodyParser = require('body-parser'),
+        multer = require('multer'),  // v0.1.8版本 可用
         socket_io = require("socket.io"),
         fs = require('fs'),
         compression = require('compression'),
         morgan = require("morgan"),
         jwt = require("jsonwebtoken"),
-        http = require("http"),
+        http = require('http'),
         https = require('https');
     let io = socket_io();
     let
@@ -22,7 +23,7 @@
         // Network interfaces
         , ifaces = os.networkInterfaces();
 // Iterate over interfaces ...
-    for (var dev in ifaces) {
+    for (let dev in ifaces) {
         // ... and find the one that matches the criteria
         let iface = ifaces[dev].filter(function (details) {
             return details.family === 'IPv4' && details.internal === false;
@@ -37,6 +38,7 @@
 
     module.exports = (appdir, config, cb) => {
         app.dir = appdir;
+        console.log('cwd: ' +  appdir) //项目根目录
         // Setup HTTPS
         let options = {
             key: fs.readFileSync(__dirname + '/../ssl/private.key'),
@@ -57,12 +59,15 @@
             res.status(500).send('Something broke!');
             next();
         });
+
+        app.use(multer()); // v0.1.8版本的写法 // for parsing multipart/form-data can use res.json(req.body);
         // to support JSON-encoded bodies
         app.use(bodyParser.json());
         // to support URL-encoded bodies
         app.use(bodyParser.urlencoded({
             extended: true
         }));
+
         if (config.debug) {
             app.use(morgan("dev"));
         }
@@ -78,7 +83,17 @@
         app.set('ipaddr', address);
         app.set('port', config.porthttp);
         require('../routers')(app, express, io);
-        var server = https.createServer(options, app);
+
+
+        //let server;
+        //if(config.https){
+           //  server = https.createServer(options, app);
+       // }else{
+             //server = http.createServer(app);
+       // }
+       let server = https.createServer(options, app);
+       // let server = http.createServer(app);
+       console.log('server: ' + server)
 
         if (config.multicore) {
         // use node socket clouster

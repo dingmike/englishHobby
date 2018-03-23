@@ -3,6 +3,7 @@ module.exports = function(mongoose) {
     let fs = require('fs')
     let walk = function(path) {
         fs.readdirSync(path).forEach(function(file) {
+            console.log('file:' + file)
             let newPath = path + '/' + file;
             let stat = fs.statSync(newPath);
             if (stat.isFile()) {
