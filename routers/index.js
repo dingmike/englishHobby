@@ -1,19 +1,24 @@
 module.exports = function(app, express, io) {
     let controllers = require('../controllers');
     app.route('/').get(function(req, res) {
+        console.log('routering now 111--------------------------------'  + req.method)
         res.render('client');
     });
-
     app.all('*', function(req, res, next) {
+        //  处理请求头部信息以及跨域
         res.header("Access-Control-Allow-Origin", "*");
         res.header('Access-Control-Allow-Methods', 'OPTIONS,GET,POST,PUT,DELETE');
         res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
+        console.log('routering now  dd--------------------------------'  + req.method);
         if ('OPTIONS' === req.method) {
+            console.log('routering now --------------------------------'  + req.method);
             return res.sendStatus(200);
         }
         if (req.secure) {
+            console.log('routering secure --------------------------------'  + req.method);
             return next();
         }
+        next();
     });
     let fs = require('fs');
     let walk = function(path) {

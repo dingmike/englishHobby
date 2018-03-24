@@ -79,9 +79,10 @@
 // Setting the app router and static folder
 //app.use(compression());
         let oneYear = 365 * 86400000;
-        app.use(express.static(__dirname + '/../public', {maxAge: oneYear}));
+        app.use(express.static(__dirname + '/../public', {maxAge: oneYear})); // 静态文件目录 public
         app.set('ipaddr', address);
         app.set('port', config.porthttp);
+        app.set('portSSL', config.SSLPORT);
         require('../routers')(app, express, io);
 
 
@@ -106,7 +107,7 @@
         servers.on('listening', function () {
             console.log('serverssl config----------------------------------------');
            // console.log(app.get('env'))
-            console.log('ServerSSL running at ' +  'https://' + app.get('ipaddr') + ':' + config.SSLPORT);
+            console.log('ServerSSL running at ' +  'https://' + app.get('ipaddr') + ':' + app.get('SSLPORT'));
         });
 
 
