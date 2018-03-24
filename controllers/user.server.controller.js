@@ -7,7 +7,7 @@ let User = mongoose.model('users');
 let requestIp = require('request-ip');
 let SECRET_TOKEN = "GUSTA_O0000";
 
-exports.authenticate = function (req, res, next) {
+exports.authenticate = function (req, res) {
 
     console.log(34434)
    /* if (!req.is('application/json')) {

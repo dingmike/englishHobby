@@ -91,21 +91,32 @@
        // }else{
              //server = http.createServer(app);
        // }
-       let server = https.createServer(options, app);
-       // let server = http.createServer(app);
+       let servers = https.createServer(options, app);  // 带ssl的
+       let server = http.createServer(app);
        console.log('server: ' + server)
 
+
+        cb(server, servers);  // 启动服务器
+        server.on('listening', function () {
+            console.log('server config----------------------------------------');
+          //  console.log(app)
+            // console.log('Servers running at ' + (config.https ? 'https' : 'http') + '://' + app.get('ipaddr') + ':' + app.get('port'));
+            console.log('Servers running at ' + 'http://' + app.get('ipaddr') + ':' + app.get('port'));
+        });
+        servers.on('listening', function () {
+            console.log('serverssl config----------------------------------------');
+           // console.log(app.get('env'))
+            console.log('ServerSSL running at ' +  'https://' + app.get('ipaddr') + ':' + config.SSLPORT);
+        });
+
+
+        // 多线程运行
         if (config.multicore) {
-        // use node socket clouster
+            // use node socket clouster
             var redis = require('socket.io-redis');
             console.log('start connecting to redis.........');
             io.adapter(redis({host: 'localhost', port: 6379}));
         }
         io.attach(server);
-
-        server.on('listening', function () {
-            console.log('Server running at ' + (config.https ? 'https' : 'http') + '://' + app.get('ipaddr') + ':' + app.get('port'));
-        });
-        cb(server);
     };
 })();
