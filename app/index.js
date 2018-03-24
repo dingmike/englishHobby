@@ -85,7 +85,6 @@
         app.set('portSSL', config.SSLPORT);
         require('../routers')(app, express, io);
 
-
         //let server;
         //if(config.https){
            //  server = https.createServer(options, app);
@@ -95,7 +94,6 @@
        let servers = https.createServer(options, app);  // 带ssl的
        let server = http.createServer(app);
        console.log('server: ' + server)
-
 
         cb(server, servers);  // 启动服务器
         server.on('listening', function () {
@@ -107,9 +105,8 @@
         servers.on('listening', function () {
             console.log('serverssl config----------------------------------------');
            // console.log(app.get('env'))
-            console.log('ServerSSL running at ' +  'https://' + app.get('ipaddr') + ':' + app.get('SSLPORT'));
+            console.log('ServerSSL running at ' +  'https://' + app.get('ipaddr') + ':' + app.get('portSSL'));
         });
-
 
         // 多线程运行
         if (config.multicore) {

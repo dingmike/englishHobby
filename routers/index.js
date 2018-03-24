@@ -1,28 +1,58 @@
-module.exports = function(app, express, io) {
+module.exports = function (app, express, io) {
     let controllers = require('../controllers');
-    app.route('/').get(function(req, res) {
-        console.log('routering now 111--------------------------------'  + req.method)
-        res.render('client');
+    let config = require('../config.js');
+    const crypto = require('crypto');
+    app.route('/').get(function (req, res, next) {
+        console.log('routering now 111--------------------------------' + req.method);
+        // res.render('client');
+        next();
     });
-    app.all('*', function(req, res, next) {
+
+    app.all('*', function (req, res, next) {
         //  处理请求头部信息以及跨域
         res.header("Access-Control-Allow-Origin", "*");
         res.header('Access-Control-Allow-Methods', 'OPTIONS,GET,POST,PUT,DELETE');
         res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
-        console.log('routering now  dd--------------------------------'  + req.method);
+        console.log('routering now  dd--------------------------------' + req.method);
+        // 微信api认证
+        console.log(req.query.signature);
+        if (req.query.signature) {
+            let signature = req.query.signature;
+            let timestamp = req.query.timestamp;
+            let nonce = req.query.nonce;
+            let echostr = req.query.echostr;
+
+            /*  加密/校验流程如下： */
+            //1. 将token、timestamp、nonce三个参数进行字典序排序
+            let array = new Array(config.wechatToken, timestamp, nonce);
+            array.sort();
+            let str = array.toString().replace(/,/g, "");
+
+            //2. 将三个参数字符串拼接成一个字符串进行sha1加密
+            let sha1Code = crypto.createHash("sha1");
+            let code = sha1Code.update(str, 'utf-8').digest("hex");
+
+            //3. 开发者获得加密后的字符串可与signature对比，标识该请求来源于微信
+            if (code === signature) {
+                res.send(echostr)
+            } else {
+                res.send("error");
+            }
+        }
+
         if ('OPTIONS' === req.method) {
-            console.log('routering now --------------------------------'  + req.method);
+            console.log('routering now --------------------------------' + req.method);
             return res.sendStatus(200);
         }
         if (req.secure) {
-            console.log('routering secure --------------------------------'  + req.method);
+            console.log('routering secure --------------------------------' + req.method);
             return next();
         }
         next();
     });
     let fs = require('fs');
-    let walk = function(path) {
-        fs.readdirSync(path).forEach(function(file) {
+    let walk = function (path) {
+        fs.readdirSync(path).forEach(function (file) {
             let newPath = path + '/' + file;
             let stat = fs.statSync(newPath);
             if (stat.isFile()) {
@@ -38,8 +68,8 @@ module.exports = function(app, express, io) {
     };
     let models_path = __dirname;
     walk(models_path);
-    io.use(function(socket, next) {
-        if (!io.nicknames){
+    io.use(function (socket, next) {
+        if (!io.nicknames) {
             io.nicknames = {}
         }
         if (controllers.chat.IsValidSocketToken(socket)) {
@@ -52,15 +82,15 @@ module.exports = function(app, express, io) {
     io.on('connection', function (socket) {
         let headers = socket.handshake.headers;
         //console.log(headers);
-        socket.on('event', function(data, fn) {
-            controllers[data.c][data.f](io,socket,data.data,fn);
+        socket.on('event', function (data, fn) {
+            controllers[data.c][data.f](io, socket, data.data, fn);
         });
         socket.on('disconnect', function () {
-            let data={
-                c:'chat',
-                f:'disconnect'
-            }
-            controllers[data.c][data.f](io,socket);
+            let data = {
+                c: 'chat',
+                f: 'disconnect'
+            };
+            controllers[data.c][data.f](io, socket);
         });
     });
 };

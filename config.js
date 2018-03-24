@@ -17,6 +17,7 @@ let config = {
     SSLPORT: process.env.PORT || 8080,
     multicore: false, // 多线程运行
     // https: true,
-    debug: true
+    debug: true,
+    wechatToken: '123123123123qazwsx'  //J1nWTPmIiMtLxDzmysLIItz59aC2sTce9qVyGR0sIJr
 };
 module.exports = config;
