@@ -5,6 +5,7 @@ module.exports = function(mongoose) {
         fs.readdirSync(path).forEach(function(file) {
             console.log('file:' + file)
             let newPath = path + '/' + file;
+            console.log('newPath:' + newPath)
             let stat = fs.statSync(newPath);
             if (stat.isFile()) {
                 if (/(.*)\.(js|coffee)/.test(file)) {

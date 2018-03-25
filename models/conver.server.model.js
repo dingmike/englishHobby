@@ -12,4 +12,4 @@ exports = module.exports = function(mongoose) {
         }
     });
     module.exports = mongoose.model('mensajes', MensajeSchema);
-}
+};
