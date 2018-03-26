@@ -13,14 +13,16 @@ function sha1(str) {
   return str;
 }
 
-function wechatAuth(req, res) {
+function wechatAuth(req, res, next) {
+  console.log('resAuth:' + res)
   var query = url.parse(req.url, true).query;
+  console.log('query:' + query)
   var signature = query.signature;
   var echostr = query.echostr;
   var timestamp = query['timestamp'];
   var nonce = query.nonce;
 
-  var reqArray = [nonce, timestamp, config.token];
+  var reqArray = [nonce, timestamp, config.wechatConfig.token];
 
   //对数组进行字典排序
   reqArray.sort();
@@ -28,11 +30,13 @@ function wechatAuth(req, res) {
   var sha1Str = sha1(sortStr);
 
   if (signature === sha1Str) {
+      console.log('getTokenL1ddd111111:' + signature);
     res.end(echostr);
   } else {
     res.end("false");
     console.log("授权失败!");
   }
+  next();
 }
 
 module.exports = wechatAuth;

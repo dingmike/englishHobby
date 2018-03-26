@@ -20,7 +20,7 @@ let config = {
     debug: true,
     wechatToken: '123123123123qazwsx',  //J1nWTPmIiMtLxDzmysLIItz59aC2sTce9qVyGR0sIJr
     wechatConfig: {
-        'token': 'qbtest',
+        'token': '123123123123qazwsx',
         'appId': 'wx83a881064cf3448a', //wx83a881064cf3448a  wx1ce65521ad23e942
         'appSecret': '927fc61a9555028a6236e90ac7a68e8a',
         'turingKey': '94bb7a64cc567365d9046fc01716a3d5',

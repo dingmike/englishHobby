@@ -9,7 +9,7 @@ function getTuringResponse(info) {
     method:'GET',
     url: 'http://apis.baidu.com/turing/turing/turing?key=879a6cb3afb84dbf4fc84a1df2ab7319&info='+info,
     headers: {
-      'apikey': config.turingKey
+      'apikey': config.wechatConfig.turingKey
     }
   };
   return new Promise((resolve, reject) => {

@@ -44,7 +44,7 @@ function getSign(jsApiTicket, noncestr, timestamp, url) {
     'url': 'http://mywapi.tunnel.qydev.com/auth'
   };
   var sortData = "jsapi_ticket=" + jsApiTicket + "&noncestr=" + noncestr + "&timestamp=" + timestamp + "&url=" + url;
-  console.log(sortData);
+  console.log('srotdata: ' + sortData);
   return sha1(sortData);
 }
 
@@ -53,6 +53,7 @@ function getJsApiData(clientUrl) {
   let noncestr = getNonceStr();
   let timestamp = getTimestamp();
   return getJsApiTicket().then(data => {
+      console.log('getTokenL1111111:' + data)
     return [getSign(JSON.parse(data).ticket, noncestr, timestamp, clientUrl), timestamp, noncestr];
   })
 }

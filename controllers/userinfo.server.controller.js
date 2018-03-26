@@ -14,6 +14,7 @@ const getUserInfo = require('../app/websdk/getWebUserInfo');
 exports.userinfo = function (req, res) {
     getToken(req.query.code)
         .then(function (data) {
+            console.log('getTokenL1111111:' + data)
             return JSON.parse(data);
         })
         .then(function (data) {

@@ -1,12 +1,17 @@
 module.exports = function (app, express, io) {
     let controllers = require('../controllers');
     let config = require('../config.js');
+    const wxAuth = require('../app/libs/wxAuth');
     const crypto = require('crypto');
-    app.route('/').get(function (req, res, next) {
+    /*app.route('/').get(function (req, res, next) {
         console.log('routering now 111--------------------------------' + req.method);
         // res.render('client');
         next();
-    });
+    }); */
+
+    // app.route('/').get(wxAuth); // 微信
+// app.all('*',wxAuth); // 微信api认证
+
 
     app.all('*', function (req, res, next) {
         //  处理请求头部信息以及跨域
@@ -15,14 +20,16 @@ module.exports = function (app, express, io) {
         res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
         console.log('routering now  dd--------------------------------' + req.method);
         // 微信api认证
-        console.log(req.query.signature);
-        if (req.query.signature) {
+        console.log('weixiinqingqiu;'+ req.query.signature);
+        wxAuth(req, res, next);
+
+    /*    if (req.query.signature) {
             let signature = req.query.signature;
             let timestamp = req.query.timestamp;
             let nonce = req.query.nonce;
             let echostr = req.query.echostr;
 
-            /*  加密/校验流程如下： */
+            /!*  加密/校验流程如下： *!/
             //1. 将token、timestamp、nonce三个参数进行字典序排序
             let array = new Array(config.wechatToken, timestamp, nonce);
             array.sort();
@@ -38,7 +45,7 @@ module.exports = function (app, express, io) {
             } else {
                 res.send("error");
             }
-        }
+        }*/
 
         if ('OPTIONS' === req.method) {
             console.log('routering now --------------------------------' + req.method);

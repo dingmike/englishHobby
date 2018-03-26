@@ -30,6 +30,7 @@ function autoReply(msgType, requestData, info) {
         '</xml>';
   }
 
+  console.log('msgType: ' +requestData.fromusername )
   return resMsg;
 }
 

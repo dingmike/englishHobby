@@ -10,16 +10,19 @@ let SECRET_TOKEN = "GUSTA_O0000";
 // wechat auth
 const turingRobot = require('../app/libs/turingRobot');
 const autoReply = require('../app/libs/wxAutoReply');
-
+// const wxAuth = require('../libs/wxAuth');
 
 exports.weixin = function (req, res) {
+    console.log('weixinReq:' + req)
     //设置返回数据header
     res.writeHead(200, {'Content-Type': 'application/xml'});
     //关注后回复
     if (req.body.xml.event === 'subscribe') {
         var resMsg = autoReply('text', req.body.xml, '欢迎关注');
+        console.log('weixinData: ' + data);
         res.end(resMsg);
     } else {
+        console.log("robot msg:" + req.body.xml.content)
         var info = encodeURI(req.body.xml.content);
         turingRobot(info).then(function (data) {
             var response = JSON.parse(data);

@@ -6,7 +6,7 @@ const request = require('request');
 const token = fs.readFileSync('./token').toString();
 
 //常用type为view和click,分别为点击事件和链接
-var menus = {
+let menus = {
   "button": [
     {
       "name": "测试菜单",
@@ -32,7 +32,7 @@ function createMenu() {
     if (err) {
       console.log(err)
     }else {
-      console.log(body);
+      console.log('create the menus: ' + body);
     }
   })
   
