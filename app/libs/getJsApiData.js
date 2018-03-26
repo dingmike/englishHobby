@@ -53,7 +53,7 @@ function getJsApiData(clientUrl) {
   let noncestr = getNonceStr();
   let timestamp = getTimestamp();
   return getJsApiTicket().then(data => {
-      console.log('getTokenL1111111:' + data)
+      console.log('getTokenL1111111:' + data);
     return [getSign(JSON.parse(data).ticket, noncestr, timestamp, clientUrl), timestamp, noncestr];
   })
 }

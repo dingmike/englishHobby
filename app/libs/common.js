@@ -8,8 +8,8 @@ const isExsitSync = require('./util').isExistSync;
 const getAccessToken = function () {
   let queryParams = {
     'grant_type': 'client_credential',
-    'appid': config.appId,
-    'secret': config.appSecret
+    'appid': config.wechatConfig.appId,
+    'secret': config.wechatConfig.appSecret
   };
 
   let wxGetAccessTokenBaseUrl = 'https://api.weixin.qq.com/cgi-bin/token?'+qs.stringify(queryParams);
