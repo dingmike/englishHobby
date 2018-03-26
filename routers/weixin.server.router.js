@@ -8,5 +8,5 @@ module.exports = function(app, express, controllers) {
     weixin.route('/weixin').post(controllers.weixin.weixin);
     weixin.route('/weixin').get(wxAuth);
 
-    app.use('/weixin', weixin);
+    app.use('/wechat', weixin);
 };

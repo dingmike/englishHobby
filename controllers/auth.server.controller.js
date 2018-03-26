@@ -14,10 +14,15 @@ const config = require('../config');
 
 exports.auth = function (req, res) {
     var clientUrl = 'http://' + req.hostname + req.url;
+    // 获取微信授权认证信息
     getJsApiData(clientUrl).then(data => {
-
-        console.log(data);
-
+        console.log('auth-data: ' + data);
+        console.log('signature:'+ data[0],'timestamp: ' + data[1], 'nonceStr: ' + data[2], 'appId: ' +  config.wechatConfig.appId)
+        let authData = {signature: data[0], timestamp: data[1], nonceStr: data[2], appId: config.wechatConfig.appId};
+        res.send({
+            code:200,
+            data: authData
+        });
        // res.render('base.html', {signature: data[0], timestamp: data[1], nonceStr: data[2], appId: config.appId});
     });
 };

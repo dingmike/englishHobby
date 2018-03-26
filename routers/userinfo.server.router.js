@@ -5,5 +5,5 @@ module.exports = function(app, express, controllers) {
 
     userinfo.route('/userinfo').get(controllers.userinfo.userinfo);
 
-    app.use('/userinfo', userinfo);
+    app.use('/wechat', userinfo);
 };
