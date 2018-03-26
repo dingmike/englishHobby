@@ -17,6 +17,7 @@
     "async": "^2.6.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "~1.18.2",
+    "body-parser-xml": "^1.1.0",
     "chess.js": "^0.10.2",
     "compression": "^1.7.2",
     "engine.io-client": "^3.2.1",
@@ -38,6 +39,7 @@
     "socket.io": "^2.0.0",
     "socket.io-emitter": "^3.1.1",
     "socket.io-redis": "^5.2.0",
-    "socketio-jwt": "^4.3.4"
+    "socketio-jwt": "^4.3.4",
+    "xml2js": "^0.4.19"
   }
 }

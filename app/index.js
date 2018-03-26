@@ -15,6 +15,7 @@
         http = require('http'),
         https = require('https');
     let io = socket_io();
+   require('body-parser-xml')(bodyParser);
     let
         // Local ip address that we're trying to calculate
         address
@@ -36,6 +37,11 @@
         address = '127.0.0.1';
     }
 
+
+
+
+
+
     module.exports = (appdir, config, cb) => {
         app.dir = appdir;
         console.log('cwd: ' +  appdir) //项目根目录
@@ -53,6 +59,17 @@
             }
             next();
         });
+
+        //解析xml
+        app.use(bodyParser.xml({
+            limit: '1MB',
+            xmlParseOptions: {
+                normalize: true,
+                normalizeTags: true,
+                explicitArray: false
+            }
+        }));
+
         // Standard error handling
         app.use((err, req, res, next) => {
             console.error(err.stack);
