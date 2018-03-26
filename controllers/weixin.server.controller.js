@@ -12,24 +12,33 @@ const turingRobot = require('../app/libs/turingRobot');
 const autoReply = require('../app/libs/wxAutoReply');
 // const wxAuth = require('../libs/wxAuth');
 
-exports.weixin = function (req, res) {
-    console.log('weixinReq:' + req)
+exports.weixin = function (req, res, next) {
+    console.log(req.body);
+    console.log('weixinReq:' + req.body.xml.content);
     //设置返回数据header
-    res.writeHead(200, {'Content-Type': 'application/xml'});
+
+    console.log( 'contentTypedddddddddddddddddddddddddddddd:---------'+ res.get('Content-Type'));
+
+    // res.writeHead(200, {'Content-Type': 'application/xml'});
     //关注后回复
     if (req.body.xml.event === 'subscribe') {
-        var resMsg = autoReply('text', req.body.xml, '欢迎关注');
+        let resMsg = autoReply('text', req.body.xml, '欢迎关注');
         console.log('weixinData: ' + data);
-        res.end(resMsg);
+       // res.end(resMsg);
     } else {
-        console.log("robot msg:" + req.body.xml.content)
-        var info = encodeURI(req.body.xml.content);
-        turingRobot(info).then(function (data) {
-            var response = JSON.parse(data);
-            var resMsg = autoReply('text', req.body.xml, response.text);
-            console.log('weixinData: ' + data);
-            res.end(resMsg);
+        console.log("robot msg:" + req.body.xml.content);
+        let info = encodeURI(req.body.xml.content);
+        turingRobot(req.body.xml).then(function (data) {
+            let response = JSON.parse(data);
+            console.log('respenseText:' + response.text);
+            let resMsg = autoReply('text', req.body.xml, response.text);
+            console.log('weixinData33dddddd: ' + resMsg);
+
+            console.log('send successfull!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+           res.end(resMsg);
         })
     }
+
+    // next();
 };
 

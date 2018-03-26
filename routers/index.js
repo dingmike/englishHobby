@@ -16,6 +16,7 @@ module.exports = function (app, express, io) {
     app.all('*', function (req, res, next) {
         //  处理请求头部信息以及跨域
         res.header("Access-Control-Allow-Origin", "*");
+        // res.writeHead(200, {'Content-Type': 'application/xml'});
         res.header('Access-Control-Allow-Methods', 'OPTIONS,GET,POST,PUT,DELETE');
         res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
         console.log('routering now  dd--------------------------------' + req.method);

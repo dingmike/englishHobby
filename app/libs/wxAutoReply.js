@@ -9,29 +9,36 @@ const request = require('request');
  */
 
 function autoReply(msgType, requestData, info) {
-  switch (msgType) {
-    case 'text':
-      var resMsg = '<xml>' +
-        '<ToUserName><![CDATA[' + requestData.fromusername + ']]></ToUserName>' +
-        '<FromUserName><![CDATA[' + requestData.tousername + ']]></FromUserName>' +
-        '<CreateTime>' + parseInt(new Date().valueOf() / 1000) + '</CreateTime>' +
-        '<MsgType><![CDATA[text]]></MsgType>' +
-        '<Content><![CDATA['+info+']]></Content>' +
-        '</xml>';
-      break;
-    //关注事件
-    case 'subscribe':
-      var resMsg = '<xml>' +
-        '<ToUserName><![CDATA[' + requestData.fromusername + ']]></ToUserName>' +
-        '<FromUserName><![CDATA[' + requestData.tousername + ']]></FromUserName>' +
-        '<CreateTime>' + parseInt(new Date().valueOf() / 1000) + '</CreateTime>' +
-        '<MsgType><![CDATA[text]]></MsgType>' +
-        '<Content><![CDATA['+info+']]></Content>' +
-        '</xml>';
-  }
+    switch (msgType) {
+        case 'text':
+            var resMsg = '<xml>' +
+                '<ToUserName><![CDATA[' + requestData.fromusername + ']]></ToUserName>' +
+                '<FromUserName><![CDATA[' + requestData.tousername + ']]></FromUserName>' +
+                '<CreateTime>' + parseInt(new Date().valueOf() / 1000) + '</CreateTime>' +
+                '<MsgType><![CDATA[text]]></MsgType>' +
+                '<Content><![CDATA[' + info + ']]></Content>' +
+                '<MsgId><![CDATA[' + requestData.msgid + ']]></MsgId>' +
+                '</xml>';
+            break;
+        //关注事件
+        case 'subscribe':
+            var resMsg = '<xml>' +
+                '<ToUserName><![CDATA[' + requestData.fromusername + ']]></ToUserName>' +
+                '<FromUserName><![CDATA[' + requestData.tousername + ']]></FromUserName>' +
+                '<CreateTime>' + parseInt(new Date().valueOf() / 1000) + '</CreateTime>' +
+                '<MsgType><![CDATA[text]]></MsgType>' +
+                '<Content><![CDATA[' + info + ']]></Content>' +
+                '<MsgId><![CDATA[' + requestData.msgid + ']]></MsgId>' +
+                '</xml>';
+    }
 
-  console.log('msgType: ' +requestData.fromusername )
-  return resMsg;
+    console.log('fromusername: ' + requestData.fromusername)
+    console.log('tousername: ' + requestData.tousername)
+    console.log('msgid: ' + requestData.msgid)
+    console.log('CreateTime: ' + parseInt(new Date().valueOf() / 1000))
+    console.log('infoOwn: ' + info);
+    console.log(resMsg);
+    return resMsg;
 }
 
 module.exports = autoReply;

@@ -14,9 +14,14 @@ function sha1(str) {
 }
 
 function wechatAuth(req, res, next) {
+// console.log( 'contentType:---------'+ res.get('Content-Type'))
+    res.get('Content-Type')
+    res.writeHead(200, {'Content-Type': 'application/xml'});
+    console.log( 'contentType:---------'+ res.get('Content-Type'))
+  console.log('resHeader:' + res.hea);
   console.log('resAuth:' + res)
   var query = url.parse(req.url, true).query;
-  console.log('query:' + query)
+  console.log(query)
   var signature = query.signature;
   var echostr = query.echostr;
   var timestamp = query['timestamp'];
