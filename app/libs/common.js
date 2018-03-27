@@ -32,7 +32,8 @@ const saveToken = function () {
   getAccessToken().then(res => {
     let token = res['access_token'];
     fs.writeFile('./token', token, function (err) {
-      
+
+      console.log('Save token successful!')
     });
   })
 };

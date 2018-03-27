@@ -31,8 +31,8 @@ exports.isExistSync = function (path) {
 };
 
 exports.sha1 = function (str) {
-  var shasum = crypto.createHash("sha1");
+  let shasum = crypto.createHash("sha1");
   shasum.update(str);
   str = shasum.digest("hex");
   return str;
-}
+};
