@@ -24,9 +24,9 @@ function getJsApiTicket() {
   })
 }
 function getNonceStr () {
-  var text = "";
-  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  for(var i = 0; i < 16; i++) {
+  let text = "";
+  let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for(let i = 0; i < 16; i++) {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return text;
@@ -37,13 +37,14 @@ function getTimestamp() {
 }
 
 function getSign(jsApiTicket, noncestr, timestamp, url) {
+  console.log('jsApiTicket: ' + jsApiTicket)
   let data = {
     'jsapi_ticket': jsApiTicket,
     'noncestr': noncestr,
     'timestamp': timestamp,
     'url': 'http://mywapi.tunnel.qydev.com/auth'
   };
-  var sortData = "jsapi_ticket=" + jsApiTicket + "&noncestr=" + noncestr + "&timestamp=" + timestamp + "&url=" + url;
+  let sortData = "jsapi_ticket=" + jsApiTicket + "&noncestr=" + noncestr + "&timestamp=" + timestamp + "&url=" + url;
   console.log('srotdata: ' + sortData);
   return sha1(sortData);
 }
@@ -53,7 +54,7 @@ function getJsApiData(clientUrl) {
   let noncestr = getNonceStr();
   let timestamp = getTimestamp();
   return getJsApiTicket().then(data => {
-      console.log('getTokenL1111111:' + data);
+      console.log('getToken successfull!!!:' + data);
     return [getSign(JSON.parse(data).ticket, noncestr, timestamp, clientUrl), timestamp, noncestr];
   })
 }

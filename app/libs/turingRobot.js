@@ -5,7 +5,7 @@ function getTuringResponse(xmlInfo) {
     let info = encodeURI(xmlInfo.content);
     let userId = xmlInfo.fromusername;
     console.log('info:' + xmlInfo.content);
-    console.log('userId:' + xmlInfo.fromusername);
+    console.log('From user\'s userId:' + xmlInfo.fromusername);
     if (typeof info !== 'string') {
         info = info.toString();
     }

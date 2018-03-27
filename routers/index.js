@@ -1,3 +1,5 @@
+
+// http://doxmate.cool/node-webot/wechat-api/api.html
 module.exports = function (app, express, io) {
     let controllers = require('../controllers');
     let config = require('../config.js');
@@ -20,8 +22,8 @@ module.exports = function (app, express, io) {
         res.header('Access-Control-Allow-Methods', 'OPTIONS,GET,POST,PUT,DELETE');
         res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
         console.log('routering now  dd--------------------------------' + req.method);
-        // 微信api认证
         console.log('weixiinqingqiu;'+ req.query.signature);
+        // 微信api认证
         wxAuth(req, res, next);
 
     /*    if (req.query.signature) {

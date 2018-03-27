@@ -23,7 +23,7 @@
         , os = require('os')
         // Network interfaces
         , ifaces = os.networkInterfaces();
-// Iterate over interfaces ...
+    // Iterate over interfaces ...
     for (let dev in ifaces) {
         // ... and find the one that matches the criteria
         let iface = ifaces[dev].filter(function (details) {
@@ -37,10 +37,15 @@
         address = '127.0.0.1';
     }
 
-
-
-
-
+    //解析xml
+   /* app.use(bodyParser.xml({
+        limit: '1MB',   // Reject payload bigger than 1 MB
+        xmlParseOptions: {
+            normalize: true,     // Trim whitespace inside text nodes
+            normalizeTags: true, // Transform tags to lowercase
+            explicitArray: false // Only put nodes in array if >1
+        }
+    }));*/
 
     module.exports = (appdir, config, cb) => {
         app.dir = appdir;

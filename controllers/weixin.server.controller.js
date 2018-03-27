@@ -14,7 +14,7 @@ const autoReply = require('../app/libs/wxAutoReply');
 
 exports.weixin = function (req, res, next) {
     console.log(req.body);
-    console.log('weixinReq:' + req.body.xml.content);
+    console.log('weixin Req:' + req.body.xml.content);
     //设置返回数据header
 
     console.log( 'contentTypedddddddddddddddddddddddddddddd:---------'+ res.get('Content-Type'));
@@ -24,7 +24,7 @@ exports.weixin = function (req, res, next) {
     if (req.body.xml.event === 'subscribe') {
         let resMsg = autoReply('text', req.body.xml, '欢迎关注');
         console.log('weixinData: ' + data);
-       // res.end(resMsg);
+        res.end(resMsg);
     } else {
         console.log("robot msg:" + req.body.xml.content);
         let info = encodeURI(req.body.xml.content);
@@ -33,12 +33,46 @@ exports.weixin = function (req, res, next) {
             console.log('respenseText:' + response.text);
             let resMsg = autoReply('text', req.body.xml, response.text);
             console.log('weixinData33dddddd: ' + resMsg);
-
             console.log('send successfull!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-           res.end(resMsg);
+            res.end(resMsg);
+            // next();
         })
     }
 
-    // next();
+/*   console.log('new wechat : '+ req.weixin)
+    // 微信输入信息都在req.weixin上
+    var message = req.weixin;
+    if (message.FromUserName === 'diaosi') {
+        // 回复屌丝(普通回复)
+        res.reply('hehe');
+    } else if (message.FromUserName === 'text') {
+        //你也可以这样回复text类型的信息
+        res.reply({
+            content: 'text object',
+            type: 'text'
+        });
+    } else if (message.FromUserName === 'hehe') {
+        // 回复一段音乐
+        res.reply({
+            type: "music",
+            content: {
+                title: "来段音乐吧",
+                description: "一无所有",
+                musicUrl: "http://mp3.com/xx.mp3",
+                hqMusicUrl: "http://mp3.com/xx.mp3",
+                thumbMediaId: "thisThumbMediaId"
+            }
+        });
+    } else {
+        // 回复高富帅(图文回复)
+        res.reply([
+            {
+                title: '你来我家接我吧',
+                description: '这是女神与高富帅之间的对话',
+                picurl: 'http://nodeapi.cloudfoundry.com/qrcode.jpg',
+                url: 'http://nodeapi.cloudfoundry.com/'
+            }
+        ]);
+    }*/
 };
 
