@@ -9,6 +9,10 @@ let SECRET_TOKEN = "GUSTA_O0000";
 
 // wechat auth
 const turingRobot = require('../app/libs/turingRobot');
+const translateRobot = require('../app/libs/translateRobot');
+// const translateObj = require('translate-api');
+// const translate = require('google-translate-api');
+
 const autoReply = require('../app/libs/wxAutoReply');
 const wxAuth = require('../app/libs/wxAuth');
 
@@ -18,9 +22,7 @@ exports.weixin = function (req, res, next) {
     //设置返回数据header
     // 微信api认证
     // wxAuth(req, res, next);
-
     console.log( 'contentTypedddddddddddddddddddddddddddddd:---------'+ res.get('Content-Type'));
-
     // res.writeHead(200, {'Content-Type': 'application/xml'});
     //关注后回复
     if (req.body.xml.event === 'subscribe') {
@@ -30,17 +32,47 @@ exports.weixin = function (req, res, next) {
     } else {
         console.log("robot msg:" + req.body.xml.content);
         let info = encodeURI(req.body.xml.content);
-        turingRobot(req.body.xml).then(function (data) {
+      /*  turingRobot(req.body.xml).then(function (data) {
             let response = JSON.parse(data);
             console.log('respenseText:' + response.text);
             let resMsg = autoReply('text', req.body.xml, response.text);
             console.log('weixinData33dddddd: ' + resMsg);
             console.log('send successfull!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
             res.end(resMsg);
-            // next();
-        })
-    }
 
+            // next();
+        },function (err) {
+            console.log('INNER ERROR: ' + err)
+        })*/
+
+
+        // translate the user message
+      /*  translate(req.body.xml.content, {to: 'zh-CN',from: 'en'}).then(resss => {
+            console.log("dddddddddddd"+resss.text);
+            console.log(resss.from.language.iso);
+            let resMsg = autoReply('text', req.body.xml, resss.text);
+            res.end(resMsg);
+        }).catch(err => {
+            console.error(err);
+        });*/
+
+
+       // let resMsg = autoReply('text', req.body.xml, translate(req.body.xml));
+      //  res.end(resMsg);
+
+        translateRobot(req.body.xml).then(function (data) {
+            // let response = JSON.parse(data);
+            console.log('respenseText:' + data);
+            let resMsg = autoReply('text', req.body.xml, data);
+            console.log('weixinData33dddddd: ' + resMsg);
+            console.log('send successfull !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+            res.end(resMsg);
+            // next();
+        },function (err) {
+            console.log('INNER ERROR: ' + err)
+        })
+
+    }
 /*   console.log('new wechat : '+ req.weixin)
     // 微信输入信息都在req.weixin上
     var message = req.weixin;

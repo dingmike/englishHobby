@@ -24,6 +24,7 @@
     "express": "~4.16.0",
     "express-jwt": "^5.3.1",
     "formidable": "^1.2.1",
+    "google-translate-api": "^2.3.0",
     "hiredis": "^0.5.0",
     "jsonwebtoken": "^8.2.0",
     "moment": "^2.12.0",
@@ -40,6 +41,7 @@
     "socket.io-emitter": "^3.1.1",
     "socket.io-redis": "^5.2.0",
     "socketio-jwt": "^4.3.4",
+    "translate-api": "^0.3.12",
     "wechat-api": "^1.35.1",
     "xml2js": "^0.4.19"
   }
