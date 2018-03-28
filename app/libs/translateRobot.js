@@ -16,14 +16,11 @@ function getTranslateResponse(xmlInfo) {
     return new Promise((resolve, reject) => {
         // 翻译 info
         translate(xmlInfo.content, {to: 'zh-CN',from: 'en'}).then(resss => {
-            console.log("dddddddddddd"+resss.text);
+            console.log("Translate over :" + resss.text);
             console.log(resss.from.language.iso);
-            //  let resMsg = autoReply('text', req.body.xml, resss.text);
-            // res.end(resMsg);
-           // return resss.text;
             resolve(resss.text)
         }).catch(err => {
-            console.error(err);
+            reject(err);
         });
     })
 }
