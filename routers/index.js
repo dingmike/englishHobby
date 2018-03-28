@@ -24,7 +24,7 @@ module.exports = function (app, express, io) {
         console.log('routering now  dd--------------------------------' + req.method);
         console.log('weixiinqingqiu;'+ req.query.signature);
         // 微信api认证
-        wxAuth(req, res, next);
+        // wxAuth(req, res, next);
 
     /*    if (req.query.signature) {
             let signature = req.query.signature;

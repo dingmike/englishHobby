@@ -10,12 +10,14 @@ let SECRET_TOKEN = "GUSTA_O0000";
 // wechat auth
 const turingRobot = require('../app/libs/turingRobot');
 const autoReply = require('../app/libs/wxAutoReply');
-// const wxAuth = require('../libs/wxAuth');
+const wxAuth = require('../app/libs/wxAuth');
 
 exports.weixin = function (req, res, next) {
     console.log(req.body);
     console.log('weixin Req:' + req.body.xml.content);
     //设置返回数据header
+    // 微信api认证
+    // wxAuth(req, res, next);
 
     console.log( 'contentTypedddddddddddddddddddddddddddddd:---------'+ res.get('Content-Type'));
 
@@ -75,4 +77,6 @@ exports.weixin = function (req, res, next) {
         ]);
     }*/
 };
+
+
 
