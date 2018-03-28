@@ -32,6 +32,10 @@ exports.weixin = function (req, res, next) {
     } else {
         console.log("robot msg:" + req.body.xml.content);
         let info = encodeURI(req.body.xml.content);
+
+
+
+
       /*  turingRobot(req.body.xml).then(function (data) {
             let response = JSON.parse(data);
             console.log('respenseText:' + response.text);
@@ -55,7 +59,6 @@ exports.weixin = function (req, res, next) {
         }).catch(err => {
             console.error(err);
         });*/
-
 
        // let resMsg = autoReply('text', req.body.xml, translate(req.body.xml));
       //  res.end(resMsg);
@@ -109,6 +112,8 @@ exports.weixin = function (req, res, next) {
         ]);
     }*/
 };
+
+
 
 
 
