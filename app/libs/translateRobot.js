@@ -24,10 +24,7 @@ function getTranslateResponse(xmlInfo) {
         fromLanguage =  'en';
     }
 
-    /*if(/^[a-zA-Z]/.test(xmlInfo.content)){ // 英文
-
-
-    }else*/ if(/^(翻译)/.test(xmlInfo.content)){ // 翻译 /^(翻译)/.test('翻译sdfasdfasdf')
+    if(/^(翻译)/.test(xmlInfo.content)){ // 翻译 /^(翻译)/.test('翻译sdfasdfasdf') /^[a-zA-Z]/.test(xmlInfo.content)
         return new Promise((resolve, reject) => {
             // 翻译 info
             translate(xmlInfo.content, {to: toLanguage,from: fromLanguage}).then(resss => {
@@ -57,7 +54,7 @@ function getTranslateResponse(xmlInfo) {
              },function (err) {
              reject(err)
              })*/
-            // use simisi robot  my robot newscnnrobot other robot ['chatbotdave','simsimi']
+            // use simisi robot  my robot newscnnrobot other robot ['chatbotdave','simsimi'， 'ryuko-matoi']
             request.post({url:'http://rebot.me/ask', formData: {username: 'simsimi', question: xmlInfo.content}}, function(err, httpResponse, body){
                 console.log('robot say: ' + body);
                 if(err){
@@ -70,7 +67,6 @@ function getTranslateResponse(xmlInfo) {
     }
 
     // translate the user message
-
 }
 function ischinese(s){
     let reg = /^([\u4E00-\u9FA5]+，?)+$/;

@@ -57,12 +57,12 @@ exports.weixin = function (req, res, next) {
             if(message.EventKey) {
                 console.log('扫描二维码关注：'+ message.EventKey +' '+ message.ticket);
             }
-            resContent = '终于等到你，还好我没放弃';
+            resContent = '终于等到你，还好我没放弃, 回复：以‘翻译’二字开头的中文，可以翻译英文；当然您还可以和我用英文对话！';
         }else if(message.event === 'unsubscribe'){
             resContent = '';
             console.log(message.FromUserName + ' 悄悄地走了...');
         }else if(message.event === 'LOCATION'){
-            resContent = '您上报的地理位置是：latitude:'+ message.latitude + ',longitude:' + message.longitude +',precision:' + message.precision;
+            resContent = '来至newscnn的问候，Your location is：latitude:'+ message.latitude + ',longitude:' + message.longitude +',precision:' + message.precision;
         }else if(message.event === 'CLICK'){
             resContent = '您点击了菜单：'+ message.eventKey;
         }else if(message.event === 'SCAN'){

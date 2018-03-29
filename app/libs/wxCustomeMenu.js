@@ -6,6 +6,8 @@ const request = require('request');
 const token = fs.readFileSync('./token').toString();
 
 //常用type为view和click,分别为点击事件和链接
+
+
 let menus = {
   "button": [
     {
