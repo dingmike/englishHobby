@@ -22,8 +22,9 @@ exports.weixin = function (req, res, next) {
     //设置返回数据header
     console.log( 'contentTypedddddddddddddddddddddddddddddd:---------'+ res.get('Content-Type'));
     // res.writeHead(200, {'Content-Type': 'application/xml'});
-    //关注后回复
-    if (req.body.xml.event === 'subscribe') {
+    //关注后回复, wechat server request
+    let message = req.body.xml;
+   /* if (message.event === 'subscribe') {
         let resMsg = autoReply('text', req.body.xml, '欢迎关注');
         console.log('weixinData: ' + data);
         res.end(resMsg);
@@ -32,7 +33,7 @@ exports.weixin = function (req, res, next) {
         let info = encodeURI(req.body.xml.content);
 
 
-      /*  turingRobot(req.body.xml).then(function (data) {
+      /!*  turingRobot(req.body.xml).then(function (data) {
             let response = JSON.parse(data);
             console.log('respenseText:' + response.text);
             let resMsg = autoReply('text', req.body.xml, response.text);
@@ -43,9 +44,36 @@ exports.weixin = function (req, res, next) {
             // next();
         },function (err) {
             console.log('INNER ERROR: ' + err)
-        })*/
+        })*!/
 
-        translateRobot(req.body.xml).then(function (data) {
+
+
+    }*/
+
+    console.log(message);
+    if(message.msgtype === 'event'){
+        let resContent ='';
+        if(message.event === 'subscribe'){
+            if(message.EventKey) {
+                console.log('扫描二维码关注：'+ message.EventKey +' '+ message.ticket);
+            }
+            resContent = '终于等到你，还好我没放弃';
+        }else if(message.event === 'unsubscribe'){
+            resContent = '';
+            console.log(message.FromUserName + ' 悄悄地走了...');
+        }else if(message.event === 'LOCATION'){
+            resContent = '您上报的地理位置是：latitude:'+ message.latitude + ',longitude:' + message.longitude +',precision:' + message.precision;
+        }else if(message.event === 'CLICK'){
+            resContent = '您点击了菜单：'+ message.eventKey;
+        }else if(message.event === 'SCAN'){
+            resContent = '关注后扫描二维码：'+ message.ticket;
+        }
+        let resMsg = autoReply('text', req.body.xml, resContent);
+        console.log('weixinData33dddddd: ' + resMsg);
+        console.log('send successfull !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        res.end(resMsg);
+    } else if(message.msgtype === 'text'){
+        translateRobot(message).then(function(data){
             // let response = JSON.parse(data);
             console.log('respenseText:' + data);
             let resMsg = autoReply('text', req.body.xml, data);
@@ -53,46 +81,10 @@ exports.weixin = function (req, res, next) {
             console.log('send successfull !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
             res.end(resMsg);
             // next();
-        },function (err) {
+        }, function (err) {
             console.log('INNER ERROR: ' + err)
         })
-
     }
-/*   console.log('new wechat : '+ req.weixin)
-    // 微信输入信息都在req.weixin上
-    var message = req.weixin;
-    if (message.FromUserName === 'diaosi') {
-        // 回复屌丝(普通回复)
-        res.reply('hehe');
-    } else if (message.FromUserName === 'text') {
-        //你也可以这样回复text类型的信息
-        res.reply({
-            content: 'text object',
-            type: 'text'
-        });
-    } else if (message.FromUserName === 'hehe') {
-        // 回复一段音乐
-        res.reply({
-            type: "music",
-            content: {
-                title: "来段音乐吧",
-                description: "一无所有",
-                musicUrl: "http://mp3.com/xx.mp3",
-                hqMusicUrl: "http://mp3.com/xx.mp3",
-                thumbMediaId: "thisThumbMediaId"
-            }
-        });
-    } else {
-        // 回复高富帅(图文回复)
-        res.reply([
-            {
-                title: '你来我家接我吧',
-                description: '这是女神与高富帅之间的对话',
-                picurl: 'http://nodeapi.cloudfoundry.com/qrcode.jpg',
-                url: 'http://nodeapi.cloudfoundry.com/'
-            }
-        ]);
-    }*/
 };
 
 

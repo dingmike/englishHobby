@@ -24,39 +24,10 @@ function getTranslateResponse(xmlInfo) {
         fromLanguage =  'en';
     }
 
-    if(xmlInfo.content === '聊天'){
+    /*if(/^[a-zA-Z]/.test(xmlInfo.content)){ // 英文
 
-        return new Promise((resolve, reject) => {
 
-           /* turingRobot(xmlInfo).then( resss => {
-
-                let response = JSON.parse(resss);
-                console.log('respenseTextTurn:' + response.text);
-                resolve(response.text)
-
-             /!*   console.log('respenseText:' + response.text);
-                let resMsg = autoReply('text', req.body.xml, response.text);
-                console.log('weixinData33dddddd: ' + resMsg);
-                console.log('send successfull!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-                res.end(resMsg);*!/
-
-                // next();
-            },function (err) {
-                reject(err)
-            })*/
-
-           // use simisi robot
-           request.post({url:'http://rebot.me/ask', formData: {username: 'newscnnrobot', question: xmlInfo.content}}, function(err, httpResponse, body){
-               console.log('robot say: ' + body);
-               if(err){
-                   reject(err)
-               }else{
-                   resolve(body);
-               }
-           })
-        })
-
-    }else if(xmlInfo.content === '翻译'){ // 翻译
+    }else*/ if(/^(翻译)/.test(xmlInfo.content)){ // 翻译 /^(翻译)/.test('翻译sdfasdfasdf')
         return new Promise((resolve, reject) => {
             // 翻译 info
             translate(xmlInfo.content, {to: toLanguage,from: fromLanguage}).then(resss => {
@@ -66,6 +37,35 @@ function getTranslateResponse(xmlInfo) {
             }).catch(err => {
                 reject(err)
             });
+        })
+    }else{
+        return new Promise((resolve, reject) => {
+
+            /* turingRobot(xmlInfo).then( resss => {
+
+             let response = JSON.parse(resss);
+             console.log('respenseTextTurn:' + response.text);
+             resolve(response.text)
+
+             /!*   console.log('respenseText:' + response.text);
+             let resMsg = autoReply('text', req.body.xml, response.text);
+             console.log('weixinData33dddddd: ' + resMsg);
+             console.log('send successfull!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+             res.end(resMsg);*!/
+
+             // next();
+             },function (err) {
+             reject(err)
+             })*/
+            // use simisi robot  my robot newscnnrobot other robot ['chatbotdave','simsimi']
+            request.post({url:'http://rebot.me/ask', formData: {username: 'simsimi', question: xmlInfo.content}}, function(err, httpResponse, body){
+                console.log('robot say: ' + body);
+                if(err){
+                    reject(err)
+                }else{
+                    resolve(body);
+                }
+            })
         })
     }
 
