@@ -17,15 +17,15 @@ function wechatAuth(req, res, next) {
 // console.log( 'contentType:---------'+ res.get('Content-Type'))
     res.get('Content-Type');
     res.writeHead(200, {'Content-Type': 'application/xml'});
-    console.log( 'contentType:---------'+ res.get('Content-Type'));
-  console.log('resHeader:' + res.head);
-  console.log('resAuth:' + res);
-  var query = url.parse(req.url, true).query;
-  console.log(query);
-  var signature = query.signature;
-  var echostr = query.echostr;
-  var timestamp = query['timestamp'];
-  var nonce = query.nonce;
+    console.log('contentType:---------' + res.get('Content-Type'));
+    console.log('resHeader:' + res.head);
+    console.log('resAuth:' + res);
+    var query = url.parse(req.url, true).query;
+    console.log(query);
+    var signature = query.signature;
+    var echostr = query.echostr;
+    var timestamp = query['timestamp'];
+    var nonce = query.nonce;
 
     var reqArray = [nonce, timestamp, config.wechatConfig.token];
 
