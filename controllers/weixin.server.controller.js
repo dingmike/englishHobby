@@ -34,8 +34,6 @@ exports.weixin = function (req, res, next) {
         let info = encodeURI(req.body.xml.content);
 
 
-
-
       /*  turingRobot(req.body.xml).then(function (data) {
             let response = JSON.parse(data);
             console.log('respenseText:' + response.text);
@@ -48,20 +46,6 @@ exports.weixin = function (req, res, next) {
         },function (err) {
             console.log('INNER ERROR: ' + err)
         })*/
-
-
-        // translate the user message
-      /*  translate(req.body.xml.content, {to: 'zh-CN',from: 'en'}).then(resss => {
-            console.log("dddddddddddd"+resss.text);
-            console.log(resss.from.language.iso);
-            let resMsg = autoReply('text', req.body.xml, resss.text);
-            res.end(resMsg);
-        }).catch(err => {
-            console.error(err);
-        });*/
-
-       // let resMsg = autoReply('text', req.body.xml, translate(req.body.xml));
-      //  res.end(resMsg);
 
         translateRobot(req.body.xml).then(function (data) {
             // let response = JSON.parse(data);
