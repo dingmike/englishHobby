@@ -20,8 +20,6 @@ exports.weixin = function (req, res, next) {
     console.log(req.body);
     console.log('weixin Req:' + req.body.xml.content);
     //设置返回数据header
-    // 微信api认证
-    // wxAuth(req, res, next);
     console.log( 'contentTypedddddddddddddddddddddddddddddd:---------'+ res.get('Content-Type'));
     // res.writeHead(200, {'Content-Type': 'application/xml'});
     //关注后回复
