@@ -37,7 +37,6 @@ function getTranslateResponse(xmlInfo) {
         })
     }else{
         return new Promise((resolve, reject) => {
-
             /* turingRobot(xmlInfo).then( resss => {
 
              let response = JSON.parse(resss);
