@@ -60,9 +60,6 @@ mongoose.connection.on('error', function (err) {
 });
 
 
-
-
-
 let walk = function (path) {
     fs.readdirSync(path).forEach(function (file) {
         let newPath = path + '/' + file;

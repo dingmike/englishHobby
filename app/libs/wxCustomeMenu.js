@@ -5,19 +5,41 @@ const request = require('request');
 //token
 const token = fs.readFileSync('./token').toString();
 
+console.log('token:' + token);
 //常用type为view和click,分别为点击事件和链接
 
 
-let menus = {
-  "button": [
+let menus =
+{
+    "button":[
     {
-      "name": "测试菜单",
-      "sub_button": [
-        {
-          "type": "view",
-          "name": "授权登录",
-          "url": "http://wuyrsp3tma.proxy.qqbrowser.cc/auth"
-        }]
+        "type":"click",
+        "name":"今日歌曲",
+        "key":"V1001_TODAY_MUSIC"
+    },
+    {
+        "type":"click",
+        "name":"歌手简介",
+        "key":"V1001_TODAY_SINGER"
+    },
+    {
+        "name":"菜单",
+        "sub_button":[
+            {
+                "type":"view",
+                "name":"搜索",
+                "url":"http://www.soso.com/"
+            },
+            {
+                "type":"view",
+                "name":"视频",
+                "url":"http://v.qq.com/"
+            },
+            {
+                "type":"click",
+                "name":"赞一下我们",
+                "key":"V1001_GOOD"
+            }]
     }]
 };
 

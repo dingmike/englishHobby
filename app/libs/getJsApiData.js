@@ -42,7 +42,7 @@ function getSign(jsApiTicket, noncestr, timestamp, url) {
     'jsapi_ticket': jsApiTicket,
     'noncestr': noncestr,
     'timestamp': timestamp,
-    'url': 'http://mywapi.tunnel.qydev.com/auth'
+    'url': 'http://newcnn.yiqigo.top/auth'
   };
   let sortData = "jsapi_ticket=" + jsApiTicket + "&noncestr=" + noncestr + "&timestamp=" + timestamp + "&url=" + url;
   console.log('srotdata: ' + sortData);

@@ -1,4 +1,4 @@
-(() => {
+// (() => {
     'use strict';
     const ENV = process.env.NODE_ENV || 'development';
     let express = require('express'),
@@ -15,6 +15,9 @@
         http = require('http'),
         https = require('https');
     let io = socket_io();
+    let getAccessToken = require('./libs/common');
+
+    // getAccessToken(); // 获取微信accessoken
    require('body-parser-xml')(bodyParser);
     let
         // Local ip address that we're trying to calculate
@@ -47,9 +50,11 @@
         }
     }));*/
 
+
+
     module.exports = (appdir, config, cb) => {
         app.dir = appdir;
-        console.log('cwd: ' +  appdir) //项目根目录
+        console.log('cwd: ' +  appdir); //项目根目录
         // Setup HTTPS
         let options = {
             key: fs.readFileSync(__dirname + '/../ssl/private.key'),
@@ -139,4 +144,4 @@
         }
         io.attach(server);
     };
-})();
+// })();

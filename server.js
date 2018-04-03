@@ -1,4 +1,4 @@
-(() => {
+// (() => {
   'use strict';
   let cluster = require('cluster');
   let config = require('./config.js');
@@ -50,6 +50,4 @@
     runServer()
   }
 
-
-
-})();
+// })();

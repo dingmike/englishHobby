@@ -55,7 +55,7 @@ function getTranslateResponse(xmlInfo) {
              reject(err)
              })*/
             // use simisi robot  my robot newscnnrobot other robot ['chatbotdave','simsimi'， 'ryuko-matoi']
-            request.post({url:'http://rebot.me/ask', formData: {username: 'simsimi', question: xmlInfo.content}}, function(err, httpResponse, body){
+            request.post({url:'http://rebot.me/ask', formData: {username: 'chatbotdave', question: xmlInfo.content}}, function(err, httpResponse, body){
                 console.log('robot say: ' + body);
                 if(err){
                     reject(err)

@@ -16,6 +16,9 @@ const translateRobot = require('../app/libs/translateRobot');
 const autoReply = require('../app/libs/wxAutoReply');
 const wxAuth = require('../app/libs/wxAuth');
 
+
+
+
 exports.weixin = function (req, res, next) {
     console.log(req.body);
     console.log('weixin Req:' + req.body.xml.content);
