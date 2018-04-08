@@ -37,7 +37,6 @@ const saveToken = function () {
     });
   })
 };
-
 const refreshToken = function () {
   saveToken();
   setInterval(function () {
