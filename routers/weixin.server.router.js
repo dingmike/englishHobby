@@ -1,7 +1,7 @@
 
 const wxAuth = require('../app/libs/wxAuth');
 // var wechat = require('wechat');
-var config = require('../config');
+let config = require('../config');
 
 module.exports = function(app, express, controllers) {
     let weixin = express.Router();

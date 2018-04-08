@@ -17,7 +17,7 @@
     let io = socket_io();
     let getAccessToken = require('./libs/common');
 
-    // getAccessToken(); // 获取微信accessoken
+    getAccessToken(); // 获取微信accessoken
    require('body-parser-xml')(bodyParser);
     let
         // Local ip address that we're trying to calculate
@@ -120,7 +120,7 @@
        // }
        let servers = https.createServer(options, app);  // 带ssl的
        let server = http.createServer(app);
-       console.log('server: ' + server)
+       console.log('server: ' + server);
 
         cb(server, servers);  // 启动服务器
         server.on('listening', function () {
