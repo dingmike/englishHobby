@@ -5,11 +5,11 @@ module.exports = function (app, express, io) {
     let config = require('../config.js');
     const wxAuth = require('../app/libs/wxAuth');
     const crypto = require('crypto');
-    /*app.route('/').get(function (req, res, next) {
+   /* app.route('/').get(function (req, res, next) {
         console.log('routering now 111--------------------------------' + req.method);
-        // res.render('client');
+        res.render('client');
         next();
-    }); */
+    });*/
 
     // app.route('/').get(wxAuth); // 微信
 // app.all('*',wxAuth); // 微信api认证

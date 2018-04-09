@@ -8,8 +8,7 @@ let requestIp = require('request-ip');
 let SECRET_TOKEN = "GUSTA_O0000";
 
 exports.authenticate = function (req, res) {
-
-    console.log(34434)
+    console.log('Start login in the system..............')
    /* if (!req.is('application/json')) {
         return next(
             res.status(500).send('application/json only!')
@@ -23,8 +22,8 @@ exports.authenticate = function (req, res) {
     /*for(var key in req){
         console.log(req[key])
     }*/
-    console.log('req.body:  '+ req.body.username);  // 有时候是查询参数req.query
-    console.log('req.query:  '+ req.query.username);
+    console.log('req.body:  '+ req.body.username);  // 取body内容数据
+    console.log('req.query:  '+ req.query.usernames); //取参数req.query
     User.findOne({username: req.body.username}, function (err, user) {
 
         if (err) {
