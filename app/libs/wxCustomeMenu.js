@@ -27,8 +27,8 @@ let menus =
         "sub_button":[
             {
                 "type":"view",
-                "name":"搜索",
-                "url":"http://www.soso.com/"
+                "name":"登录",
+                "url":"http://newscnn.tunnel.qydev.com"
             },
             {
                 "type":"view",

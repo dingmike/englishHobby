@@ -27,31 +27,6 @@ exports.weixin = function (req, res, next) {
     // res.writeHead(200, {'Content-Type': 'application/xml'});
     //关注后回复, wechat server request
     let message = req.body.xml;
-   /* if (message.event === 'subscribe') {
-        let resMsg = autoReply('text', req.body.xml, '欢迎关注');
-        console.log('weixinData: ' + data);
-        res.end(resMsg);
-    } else {
-        console.log("robot msg:" + req.body.xml.content);
-        let info = encodeURI(req.body.xml.content);
-
-
-      /!*  turingRobot(req.body.xml).then(function (data) {
-            let response = JSON.parse(data);
-            console.log('respenseText:' + response.text);
-            let resMsg = autoReply('text', req.body.xml, response.text);
-            console.log('weixinData33dddddd: ' + resMsg);
-            console.log('send successfull!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-            res.end(resMsg);
-
-            // next();
-        },function (err) {
-            console.log('INNER ERROR: ' + err)
-        })*!/
-
-
-
-    }*/
 
     console.log(message);
     if(message.msgtype === 'event'){

@@ -26,7 +26,6 @@
       for (let i = 0; i < numCPUs; i++) {
         cluster.fork();
       }
-
       Object.keys(cluster.workers).forEach(id => {
         console.log('Running with process ID: ', cluster.workers[id].process.pid);
       });

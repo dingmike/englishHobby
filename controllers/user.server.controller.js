@@ -8,13 +8,13 @@ let requestIp = require('request-ip');
 let SECRET_TOKEN = "GUSTA_O0000";
 
 exports.authenticate = function (req, res) {
-    console.log('Start login in the system..............')
+    console.log('Start login in the system..............');
    /* if (!req.is('application/json')) {
         return next(
             res.status(500).send('application/json only!')
         )
     }*/
-    console.log('req+++++++++'+ req.body)
+    console.log('req+++++++++'+ req.body);
     console.log(req.originalUrl); // '/admin/new'
     console.log(req.baseUrl); // '/admin'
     console.log(req.path); // '/new'
@@ -33,9 +33,9 @@ exports.authenticate = function (req, res) {
                 console.log("USers:  "+user);
                 if (bcrypt.compareSync(req.body.password, user.password)) {
                     let token = generaTokenUser(user._id, req);
-                    console.log('token:' + token)
+                    console.log('token:' + token);
                     user["password"] = null;
-                    console.log('myname:'+user.username)
+                    console.log('myname:'+user.username);
                     res.send({
                         code:200,
                         type: true,

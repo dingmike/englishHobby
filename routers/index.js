@@ -14,7 +14,6 @@ module.exports = function (app, express, io) {
     // app.route('/').get(wxAuth); // 微信
 // app.all('*',wxAuth); // 微信api认证
 
-
     app.all('*', function (req, res, next) {
         //  处理请求头部信息以及跨域
         res.header("Access-Control-Allow-Origin", "*");
