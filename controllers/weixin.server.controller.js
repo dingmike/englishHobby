@@ -66,6 +66,12 @@ exports.weixin = function (req, res, next) {
 };
 
 
+exports.wxLogin = function (req, res, next) {
+
+    console.log(req.body);
+}
+
+
 
 
 
