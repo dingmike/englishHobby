@@ -17,7 +17,7 @@
     let io = socket_io();
     let getAccessToken = require('./libs/common');
 
-    //getAccessToken(); // 获取微信accessoken 每隔2小时更新一次access_token
+     //getAccessToken(); // 获取微信accessoken 每隔2小时更新一次access_token
    require('body-parser-xml')(bodyParser);
     let
         // Local ip address that we're trying to calculate
@@ -111,7 +111,6 @@
         app.set('port', config.porthttp);
         app.set('portSSL', config.SSLPORT);
         require('../routers')(app, express, io);
-
         //let server;
         //if(config.https){
            //  server = https.createServer(options, app);

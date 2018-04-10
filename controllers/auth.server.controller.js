@@ -17,6 +17,7 @@ const config = require('../config');
 const createMenu = require('../app/libs/wxCustomeMenu');
 
 createMenu();
+
 exports.auth = function (req, res) {
     let clientUrl = 'http://' + req.hostname + req.url;
     // 获取微信授权认证信息
@@ -27,7 +28,7 @@ exports.auth = function (req, res) {
         let authData = {signature: data[0], timestamp: data[1], nonceStr: data[2], appId: config.wechatConfig.appId};
 
         res.send({
-            code:200,
+            code: 200,
             data: authData
         });
        // res.render('base.html', {signature: data[0], timestamp: data[1], nonceStr: data[2], appId: config.appId});

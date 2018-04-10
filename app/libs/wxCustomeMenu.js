@@ -8,7 +8,6 @@ const token = fs.readFileSync('./token').toString();
 console.log('token:' + token);
 //常用type为view和click,分别为点击事件和链接
 
-
 let menus =
 {
     "button":[
@@ -28,7 +27,7 @@ let menus =
             {
                 "type":"view",
                 "name":"登录",
-                "url":"http://newscnn.tunnel.qydev.com"
+                "url":"http://newscnn.yiqigo.top"
             },
             {
                 "type":"view",

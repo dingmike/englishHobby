@@ -4,11 +4,15 @@ var uniqueValidator = require('mongoose-unique-validator');
 exports = module.exports = function(mongoose) {
     Schema = mongoose.Schema;
     var UserSchema = new Schema({
+        openid:{
+            type: String,
+            unique: true
+        },
         email: {
             type: String,
             match: [/.+\@.+\..+/, "invalid_email_address"],
             unique: true,
-            required: 'email_required'
+            required: false
         },
         name: String,
         image: {
@@ -20,7 +24,7 @@ exports = module.exports = function(mongoose) {
         username: {
             type: String,
             unique: true,
-            required: 'username_required',
+            required: false,
             trim: true
         },
         password: {

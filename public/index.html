@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css">
     <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.3.0.js"></script>
     <script type="text/javascript" src="https://res.wx.qq.com/open/libs/weuijs/1.1.3/weui.min.js"></script>
+    <script type="text/javascript" src="./js/jquery-3.3.1.min.js"></script>
     <style>
         .container{
             padding: 10px;
@@ -42,16 +43,33 @@
 
 <script>
   //
+        $(function () {
+
+            const HOST = 'http://newscnn.tunnel.qydev.com/';
+            var alink = encodeURI('http://newscnn.tunnel.qydev.com/');
+            var scopeInfo ='snsapi_userinfo'; //snsapi_userinfo :获取用户基本信息，snsapi_base：用户openid
+            var wcAlink = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx83a881064cf3448a&redirect_uri=' + alink + '&response_type=code&scope='+ scopeInfo +'&state=123#wechat_redirect"'
+            document.getElementById('toWechat').setAttribute('href',wcAlink);
+
+            var wxCode =GetUrlParam('code');
+            if(wxCode){
+                weui.alert('wxCode: ' + wxCode);
+
+                $.ajax({
+                    method: 'post',
+                    url: HOST + 'wechat/wxLogin',
+                    data: {
+                        code: wxCode
+                    },
+                    success: function( res ) {
+                        alert(res.data)
+                    }
+                });
+
+            }
 
 
-        var alink = encodeURI('http://newscnn.tunnel.qydev.com/');
-        var wcAlink = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx83a881064cf3448a&redirect_uri=' + alink + '&response_type=code&scope=snsapi_base&state=123#wechat_redirect"'
-        document.getElementById('toWechat').setAttribute('href',wcAlink);
-
-        var wxCode =GetUrlParam('code');
-        if(wxCode){
-            weui.alert('wxCode: ' + wxCode);
-        }
+        })
 
 
      function GetUrlParam(paraName) {
