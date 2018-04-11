@@ -11,8 +11,9 @@ module.exports = function(app, express, controllers) {
     weixin.route('/auth').post(controllers.weixin.weixin);  // 为wechat的二级path // 接受微信服务器发起的post请求
 
     //微信用户一键登录
-    weixin.route('/wxLogin').post(controllers.weixin.wxLogin);
+    weixin.route('/wxLogin').get(controllers.weixin.wxLogin);
 
+    weixin.route('/getWxAccess_token').get(controllers.weixin.getWxAccess_token);
     // weixin.route('/').get(wxAuth);
     // app.use('/wechat', wechat(config.wechatNewConf, controllers.weixin.weixin));
     app.use('/wechat', weixin);  // 对外请求的path为  /wechat/...

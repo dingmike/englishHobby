@@ -27,7 +27,7 @@
         </div>
         <div class="weui-msg__opr-area">
             <p class="weui-btn-area">
-                <a id="toWechat" href="" class="weui-btn weui-btn_primary">微信用户一键登录</a>
+                <a id="toWechat" href="http://newscnn.yiqigo.top/wechat/wxLogin" class="weui-btn weui-btn_primary">微信用户一键登录</a>
             </p>
         </div>
         <div class="weui-msg__extra-area">
@@ -44,15 +44,32 @@
 <script>
   //
         $(function () {
+            const HOST = 'http://newscnn.yiqigo.top/';
 
-            const HOST = 'http://newscnn.tunnel.qydev.com/';
-            var alink = encodeURI('http://newscnn.tunnel.qydev.com/');
+           /* $('#toWechat').click(function () {
+                debugger
+                $.ajax({
+                    method: 'GET',
+                    url: HOST + 'wechat/wxLogin',
+                    success: function( res ) {
+                        weui.alert('res: ' + res);
+                        location.href = 'wechat/' + res;
+                     //   console.log(res.data)
+                       // $('#okId').html(res.data)
+                    }
+                });
+            })*/
+
+
+//            const HOST = 'http://newscnn.tunnel.qydev.com/';
+        /*    const HOST = 'http://newscnn.yiqigo.top/wechat/wxLogin';
+            var alink = encodeURI('http://newscnn.yiqigo.top/');
             var scopeInfo ='snsapi_userinfo'; //snsapi_userinfo :获取用户基本信息，snsapi_base：用户openid
             var wcAlink = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx83a881064cf3448a&redirect_uri=' + alink + '&response_type=code&scope='+ scopeInfo +'&state=123#wechat_redirect"'
-            document.getElementById('toWechat').setAttribute('href',wcAlink);
+            document.getElementById('toWechat').setAttribute('href',wcAlink);*/
 
-            var wxCode =GetUrlParam('code');
-            if(wxCode){
+//            var wxCode =GetUrlParam('code');
+           /* if(wxCode){
                 weui.alert('wxCode: ' + wxCode);
 
                 $.ajax({
@@ -66,7 +83,7 @@
                     }
                 });
 
-            }
+            }*/
 
 
         })
