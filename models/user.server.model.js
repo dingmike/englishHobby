@@ -1,6 +1,8 @@
 
 
 let uniqueValidator = require('mongoose-unique-validator');
+const mongooseStringQuery = require('mongoose-string-query');
+const timestamps = require('mongoose-timestamp');
 exports = module.exports = function(mongoose) {
     Schema = mongoose.Schema;
     let UserSchema = new Schema({
@@ -39,10 +41,6 @@ exports = module.exports = function(mongoose) {
         },
         password: {
             type: String
-        },
-        createdTime: {
-            type: Date,
-            default: Date.now
         },
         roles: {
             type: Array,
@@ -91,6 +89,8 @@ exports = module.exports = function(mongoose) {
         redeemedGift: [{ type: Schema.Types.ObjectId, ref: 'UserGiftOrder' }]
 
     });
+    UserSchema.plugin(timestamps);
+    UserSchema.plugin(mongooseStringQuery);
     UserSchema.plugin(uniqueValidator,{ message: 'error_unique_{PATH}' });
     module.exports = mongoose.model('users', UserSchema);
 };
