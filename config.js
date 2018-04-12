@@ -13,6 +13,7 @@ let config = {
         },
         uri: process.env.MONGO_URL || 'mongodb://127.0.0.1/hobbydb'
     },
+    SECRET_TOKEN: 'dingmike#123',
     porthttp: process.env.PORT || 3311,
     SSLPORT: process.env.PORT || 8080,
     multicore: false, // 多线程运行

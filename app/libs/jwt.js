@@ -18,7 +18,8 @@ function generaTokenUser(id_user, req) {
     let newToken = {
         id_user: id_user,
         iat: moment().unix(),
-        expireIn: moment().add(3, "days").unix(),
+        // expireIn: moment().add(7, "days").unix(),
+        expireIn: moment().add(20, "seconds").unix(),
         host: requestIp.getClientIp(req)
     };
     console.log(newToken.host);
@@ -66,24 +67,35 @@ function getTokenAndVertify(req, res, next) {
     jwt.verify(bearerToken, config.SECRET_TOKEN, (err, decode) => {
         if(err) {
             console.log('verify err---------------------->' + err);
-            return res.json({code: 401, data: {inernalError:'error inernal'}, msg: err});
+            return res.json({code: 401, data: {inernalError:'Error inernal'}, msg: err});
         }else{
             //verify OK
             let expireIn = decode.expireIn; // expire time is seconds
             console.log('expireIN:' + decode.id_user+ "————expireIn："+ decode.expireIn);
             let userId = decode.id_user;
 
-            console.log('decode.expireIn: ' + decode.expireIn)
-            console.log('decode.iat: ' + decode.iat)
-            console.log('decode.moment().unix(): ' + moment().unix())
+            console.log('decode.expireIn: ' + decode.expireIn);
+            console.log('decode.iat: ' + decode.iat);
+            console.log('decode.moment().unix(): ' + moment().unix());
 
             if (decode.host !== requestIp.getClientIp(req)) {
-                next('token_host_invalid')
+                return res.json({
+                    code:401,
+                    msg:'Token host invalid!'
+                })
             } else {
                 if ((decode.expireIn <= moment().unix())) {
-                    next('token_expire')
+                    return  res.json({
+                        code:401,
+                        msg:'Token expire!'
+                    })
                 }else{
-                    next('verify the token')
+                   /* res.json({
+                        code:200,
+                        msg:'Verify the token!'
+                    })*/
+                    console.log('Verify the token!')
+                    next(null, decode);
                 }
             }
             //if token is in or not in

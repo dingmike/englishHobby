@@ -12,7 +12,7 @@ module.exports = function (app, express, io) {
     });*/
 
     // app.route('/').get(wxAuth); // 微信
-// app.all('*',wxAuth); // 微信api认证
+    // app.all('*',wxAuth); // 微信api认证
 
     app.all('*', function (req, res, next) {
         //  处理请求头部信息以及跨域
@@ -22,32 +22,6 @@ module.exports = function (app, express, io) {
         res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
         console.log('routering now  dd--------------------------------' + req.method);
         console.log('weixiinqingqiu;'+ req.query.signature);
-        // 微信api认证
-        // wxAuth(req, res, next);
-
-    /*    if (req.query.signature) {
-            let signature = req.query.signature;
-            let timestamp = req.query.timestamp;
-            let nonce = req.query.nonce;
-            let echostr = req.query.echostr;
-
-            /!*  加密/校验流程如下： *!/
-            //1. 将token、timestamp、nonce三个参数进行字典序排序
-            let array = new Array(config.wechatToken, timestamp, nonce);
-            array.sort();
-            let str = array.toString().replace(/,/g, "");
-
-            //2. 将三个参数字符串拼接成一个字符串进行sha1加密
-            let sha1Code = crypto.createHash("sha1");
-            let code = sha1Code.update(str, 'utf-8').digest("hex");
-
-            //3. 开发者获得加密后的字符串可与signature对比，标识该请求来源于微信
-            if (code === signature) {
-                res.send(echostr)
-            } else {
-                res.send("error");
-            }
-        }*/
 
         if ('OPTIONS' === req.method) {
             console.log('routering now --------------------------------' + req.method);

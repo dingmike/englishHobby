@@ -1,4 +1,4 @@
-let jwt = require("jsonwebtoken");
+
 let bcrypt = require('bcryptjs');
 let moment = require('moment');
 let async = require('async');
@@ -6,24 +6,25 @@ let mongoose = require('mongoose');
 let User = mongoose.model('users');
 let requestIp = require('request-ip');
 let SECRET_TOKEN = "GUSTA_O0000";
+let jwtAuth = require('../app/libs/jwt');
 
 exports.authenticate = function (req, res) {
     console.log('Start login in the system..............');
-   /* if (!req.is('application/json')) {
-        return next(
-            res.status(500).send('application/json only!')
-        )
-    }*/
-    console.log('req+++++++++'+ req.body);
+    /* if (!req.is('application/json')) {
+     return next(
+     res.status(500).send('application/json only!')
+     )
+     }*/
+    console.log('req+++++++++' + req.body);
     console.log(req.originalUrl); // '/admin/new'
     console.log(req.baseUrl); // '/admin'
     console.log(req.path); // '/new'
     console.log(req.params); // '/new'
     /*for(var key in req){
-        console.log(req[key])
-    }*/
-    console.log('req.body:  '+ req.body.username);  // 取body内容数据
-    console.log('req.query:  '+ req.query.usernames); //取参数req.query
+     console.log(req[key])
+     }*/
+    console.log('req.body:  ' + req.body.username);  // 取body内容数据
+    console.log('req.query:  ' + req.query.usernames); //取参数req.query
 
 
     if (!req.body.username) {
@@ -36,31 +37,36 @@ exports.authenticate = function (req, res) {
             code: 500,
             msg: 'No password!'
         });
-    }else{
+    } else {
         User.findOne({username: req.body.username}, function (err, user) {
-
             if (err) {
-                res.status(500).send('internal_server_error');
+                res.status(500).send(
+                    {
+                        code: 500,
+                        msg: 'Internal server error!'
+                    });
             } else {
                 if (user) {
-                    console.log("USER:  "+user);
+                    console.log("USER:  " + user);
                     //bcrypt.compareSync(req.body.password, user.password)
                     user.comparePassword(req.body.password, function (err, isMatch) {
-                        if (err) { return console.log(err) }
+                        if (err) {
+                            return console.log(err)
+                        }
                         // 密码不匹配
                         if (!isMatch) {
                             return res.status(500).json({
-                                error: 'invaild username or password'
+                                code: 500,
+                                msg: 'Invaild username or password!'
                             })
-                        }else{
+                        } else {
                             // 匹配成功
-                            let token = generaTokenUser(user._id, req);
+                            let token = jwtAuth.generaTokenUser(user._id, req);
                             console.log('token:' + token);
                             user["password"] = null;
-                            console.log('myname:'+user.username);
+                            console.log('myname:' + user.username);
                             return res.status(200).send({
-                                code:200,
-                                type: true,
+                                code: 200,
                                 data: user,
                                 token: token
                             });
@@ -92,7 +98,10 @@ exports.get = function (req, res) {
     });
 };
 exports.test = function (req, res) {
-    getToken(req, function (err, token) {
+
+    //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoiNWFjZWY4ZmJjOTM4ZDEzNDZjOTk1NGUwIiwiaWF0IjoxNTIzNTIxNzU1LCJleHAiOjE1MjM3ODA5NTUsImhvc3QiOiI6OmZmZmY6MTkyLjE2OC4xNi4xOTgifQ.VLicGl21o7-nrmb8N5jU9EGiz4OJFeKSzlb-d27t_lo
+    //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoiNWFjZWY4ZmJjOTM4ZDEzNDZjOTk1NGUwIiwiaWF0IjoxNTIzNTIxODUyLCJleHAiOjE1MjM3ODEwNTIsImhvc3QiOiI6OmZmZmY6MTkyLjE2OC4xNi4xOTgifQ.tQwu8ukAof2UMm-oApOPe6QfT2_bHiRS9t4G91n4nzE
+    jwtAuth.getTokenAndVertify(req, res, function (err, token) {
         if (err) {
             return res.status(403).send(err);
         }
@@ -138,28 +147,31 @@ exports.signin = function (req, res) {
     let data = req.body;
     let userModel = new User(data);
     userModel.email = data.email;
-    userModel.password =data.password;
+    userModel.password = data.password;
     // userModel.password = bcrypt.hashSync(data.password);
     userModel.save(function (err, user) {
         if (err) {
             res.status(500).send(err);
         } else {
-            user.password = 'haha,I will call 110!';
+            user.password = 'Haha,I will call 110!';
             res.status(200).send({
                 code: 200,
                 data: user,
-                token: generaTokenUser(user._id, req)
+                token: jwtAuth.generaTokenUser(user._id, req),
+                msg: 'Login successful!'
             })
         }
     });
 };
 let generaTokenUser = function (id_user, req) {
+    // Moment.js被用来设置token将在3天之后失效。
     let newToken = {
         id_user: id_user,
         iat: moment().unix(),
         exp: moment().add(3, "days").unix(),
         host: requestIp.getClientIp(req)
     };
+    console.log(newToken.host)
     //console.log(newToken)
     return jwt.sign(newToken, SECRET_TOKEN);
 };
@@ -250,7 +262,8 @@ let InstallInit = function () {
                         sexo: 'f'
                     };
                     insert.push(new User(data));
-                };
+                }
+                ;
                 async.mapLimit(insert, 10, function (document, next) {
                     document.save(next);
                 }, function () {
