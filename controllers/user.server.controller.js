@@ -1,5 +1,5 @@
 let jwt = require("jsonwebtoken");
-let bcrypt = require('bcrypt-nodejs');
+let bcrypt = require('bcryptjs');
 let moment = require('moment');
 let async = require('async');
 let mongoose = require('mongoose');
@@ -110,15 +110,15 @@ exports.edit = function (req, res) {
 };
 exports.signin = function (req, res) {
     let data = req.body;
-//Adicionando usuario 
     let userModel = new User(data);
     userModel.email = data.email;
-    userModel.password = bcrypt.hashSync(data.password);
+    userModel.password =data.password;
+    // userModel.password = bcrypt.hashSync(data.password);
     userModel.save(function (err, user) {
         if (err) {
             res.status(500).send(err);
         } else {
-            user.password = null;
+            user.password = 'haha,I will call 110!';
             res.status(200).send({
                 type: true,
                 data: user,
@@ -234,4 +234,4 @@ let InstallInit = function () {
         })
     }, 3000);
 };
-InstallInit();
+// InstallInit();

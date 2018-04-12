@@ -15,7 +15,7 @@
   "dependencies": {
     "acl": "^0.4.11",
     "async": "^2.6.0",
-    "bcrypt-nodejs": "0.0.3",
+    "bcryptjs": "^2.4.3",
     "body-parser": "~1.18.2",
     "body-parser-xml": "^1.1.0",
     "chess.js": "^0.10.2",

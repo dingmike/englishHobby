@@ -1,5 +1,5 @@
 let jwt = require("jsonwebtoken");
-let bcrypt = require('bcrypt-nodejs');
+let bcrypt = require('bcryptjs');
 let moment = require('moment');
 let async = require('async');
 let mongoose = require('mongoose');

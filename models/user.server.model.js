@@ -1,4 +1,4 @@
-
+const bcrypt = require('bcryptjs')
 
 let uniqueValidator = require('mongoose-unique-validator');
 const mongooseStringQuery = require('mongoose-string-query');
@@ -89,8 +89,65 @@ exports = module.exports = function(mongoose) {
         redeemedGift: [{ type: Schema.Types.ObjectId, ref: 'UserGiftOrder' }]
 
     });
+
+
+    // schema static method  //page fetch  one page has 5 default data
+    UserSchema.statics = {
+        fetch(id, pages, sortNum, cb) {
+            let pageSize = pages || 5;
+            let sortKind = sortNum || -1;
+            if (id) {
+                return this.find({'_id': {"$lt": id}})
+                    .select('_id createdAt nickname gender address phone money roles score readPages email isAnswerToday enableScore')
+                    .limit(pageSize)
+                    .sort({'_id': -1})
+                    .exec(cb);
+            } else {
+                return this.find({})
+                    .select('_id createdAt nickname gender address phone money roles score readPages email isAnswerToday enableScore')
+                    .limit(pages)
+                    .sort({'_id': -1})
+                    .exec(cb);
+            }
+
+        }
+    };
+// 钩子函数，指定 save() 之前的操作
+    UserSchema.pre('save', function (next) {
+        const user = this;
+        // 上文中的“缓慢参数”
+        const SALT_FACTOR = 10;
+        // 随机生成盐
+        bcrypt.genSalt(SALT_FACTOR, function (err, salt) {
+            if (err) return next(err);
+           // console.log('userpassss: ' + user.password);
+            // 加盐哈希
+            bcrypt.hash(user.password, salt, function (err, hash) {
+                if (err) return next(err);
+                user.password = hash;
+               // console.log('pas: ' + user.password);
+                next()
+            })
+        })
+    });
+
+    UserSchema.methods.comparePassword = function (password, cb) {
+        // 对比
+        bcrypt.compare(password, this.password, function (err, isMatch) {
+            if (err) { return cb(err) }
+            cb(null, isMatch)
+        })
+    };
+
+
     UserSchema.plugin(timestamps);
     UserSchema.plugin(mongooseStringQuery);
     UserSchema.plugin(uniqueValidator,{ message: 'error_unique_{PATH}' });
-    module.exports = mongoose.model('users', UserSchema);
+    let User = mongoose.model('users', UserSchema);
+    User.on('index', function (err) {
+        if (err) {
+            console.log('errorModel:' + err)
+        }
+    });
+    module.exports = User;
 };
