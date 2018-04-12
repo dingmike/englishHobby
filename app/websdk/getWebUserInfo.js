@@ -1,4 +1,4 @@
-'use strict';
+'use strict'; //未使用
 const request = require('request');
 const qs = require('querystring');
 

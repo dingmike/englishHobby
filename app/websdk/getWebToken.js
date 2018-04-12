@@ -1,5 +1,5 @@
 /**
- * Created by admin on 2018/3/26.
+ * Created by admin on 2018/3/26. 未使用
  */
 'use strict';
 const request = require('request');
