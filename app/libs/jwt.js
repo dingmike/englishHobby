@@ -18,8 +18,8 @@ function generaTokenUser(id_user, req) {
     let newToken = {
         id_user: id_user,
         iat: moment().unix(),
-        // expireIn: moment().add(7, "days").unix(),
-        expireIn: moment().add(20, "seconds").unix(),
+        expireIn: moment().add(config.expireDays, "days").unix(),
+        // expireIn: moment().add(20, "seconds").unix(),
         host: requestIp.getClientIp(req)
     };
     console.log(newToken.host);
@@ -31,47 +31,47 @@ function getTokenAndVertify(req, res, next) {
 
     let bearerToken = req.headers["authorization"];
     console.log('bearerToken: ' + bearerToken)
-   /* if (typeof bearerHeader !== 'undefined') {
-        let bearer = bearerHeader.split(" ");
-        bearerToken = bearer[1];
-        let token = jwt.decode(bearerToken, {complete: true});
+    /* if (typeof bearerHeader !== 'undefined') {
+         let bearer = bearerHeader.split(" ");
+         bearerToken = bearer[1];
+         let token = jwt.decode(bearerToken, {complete: true});
 
-        console.log('token.token: '+ token)
-        console.log('token.payload.exp: '+ token.payload.exp)
-        console.log('tmoment().unix(): '+ moment().unix())
-        try {
+         console.log('token.token: '+ token)
+         console.log('token.payload.exp: '+ token.payload.exp)
+         console.log('tmoment().unix(): '+ moment().unix())
+         try {
 
 
-            if ((token.payload.exp <= moment().unix())) {
-                next('token_expire')
-            } else {
-                //verificando mismo host de usuario
-                next(null, res, token.payload)
+             if ((token.payload.exp <= moment().unix())) {
+                 next('token_expire')
+             } else {
+                 //verificando mismo host de usuario
+                 next(null, res, token.payload)
 
-               /!* if (token.payload.host !== requestIp.getClientIp(req)) {
-                    next('token_host_invalid')
-                } else {
-                    next(null, token.payload)
-                }*!/
-            }
-        } catch (e) {
-            next('token_host_invalid')
-        }
+                /!* if (token.payload.host !== requestIp.getClientIp(req)) {
+                     next('token_host_invalid')
+                 } else {
+                     next(null, token.payload)
+                 }*!/
+             }
+         } catch (e) {
+             next('token_host_invalid')
+         }
 
-    } else {
-        return next('token_not_found')
-    }
-*/
+     } else {
+         return next('token_not_found')
+     }
+ */
 
     //verify the token
     jwt.verify(bearerToken, config.SECRET_TOKEN, (err, decode) => {
-        if(err) {
+        if (err) {
             console.log('verify err---------------------->' + err);
-            return res.json({code: 401, data: {inernalError:'Error inernal'}, msg: err});
-        }else{
+            return res.json({code: 401, data: {inernalError: 'Error inernal'}, msg: err});
+        } else {
             //verify OK
             let expireIn = decode.expireIn; // expire time is seconds
-            console.log('expireIN:' + decode.id_user+ "————expireIn："+ decode.expireIn);
+            console.log('expireIN:' + decode.id_user + "————expireIn：" + decode.expireIn);
             let userId = decode.id_user;
 
             console.log('decode.expireIn: ' + decode.expireIn);
@@ -80,20 +80,20 @@ function getTokenAndVertify(req, res, next) {
 
             if (decode.host !== requestIp.getClientIp(req)) {
                 return res.json({
-                    code:401,
-                    msg:'Token host invalid!'
+                    code: 401,
+                    msg: 'Token host invalid!'
                 })
             } else {
                 if ((decode.expireIn <= moment().unix())) {
-                    return  res.json({
-                        code:401,
-                        msg:'Token expire!'
+                    return res.json({
+                        code: 401,
+                        msg: 'Token expire!'
                     })
-                }else{
-                   /* res.json({
-                        code:200,
-                        msg:'Verify the token!'
-                    })*/
+                } else {
+                    /* res.json({
+                         code:200,
+                         msg:'Verify the token!'
+                     })*/
                     console.log('Verify the token!')
                     next(null, decode);
                 }

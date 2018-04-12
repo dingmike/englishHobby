@@ -1,6 +1,7 @@
 // (() => {
     'use strict';
     const ENV = process.env.NODE_ENV || 'development';
+    const config = require('../config');
     let express = require('express'),
         cluster = require('cluster'),
         moment = require('moment'),
@@ -13,7 +14,8 @@
         morgan = require("morgan"),
         jwt = require("jsonwebtoken"),
         http = require('http'),
-        https = require('https');
+        https = require('https'),
+        cors = require('cors');
     let io = socket_io();
     let getAccessToken = require('./libs/common');
 
@@ -69,6 +71,9 @@
             }
             next();
         });
+
+        // 跨域cors
+        app.use(cors(config.CORS_CONFIG));
 
         //解析xml
         app.use(bodyParser.xml({

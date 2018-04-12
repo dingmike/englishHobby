@@ -13,7 +13,14 @@ let config = {
         },
         uri: process.env.MONGO_URL || 'mongodb://127.0.0.1/hobbydb'
     },
+    CORS_CONFIG:{
+        "origin": ['http://192.168.0.114:8089','http://192.168.0.103:8089','http://goyigo.top','http://yiqigo.top'],   // "origin":"*"允许说有域名的访问
+        "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+        "preflightContinue": false,
+        "optionsSuccessStatus": 204
+    },
     SECRET_TOKEN: 'dingmike#123',
+    expireDays: 7,
     porthttp: process.env.PORT || 3311,
     SSLPORT: process.env.PORT || 8080,
     multicore: false, // 多线程运行
