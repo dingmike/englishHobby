@@ -24,33 +24,59 @@ exports.authenticate = function (req, res) {
     }*/
     console.log('req.body:  '+ req.body.username);  // 取body内容数据
     console.log('req.query:  '+ req.query.usernames); //取参数req.query
-    User.findOne({username: req.body.username}, function (err, user) {
 
-        if (err) {
-            res.status(500).send('internal_server_error');
-        } else {
-            if (user) {
-                console.log("USers:  "+user);
-                if (bcrypt.compareSync(req.body.password, user.password)) {
-                    let token = generaTokenUser(user._id, req);
-                    console.log('token:' + token);
-                    user["password"] = null;
-                    console.log('myname:'+user.username);
-                    res.send({
-                        code:200,
-                        type: true,
-                        data: user,
-                        token: token
-                    });
-                    // next();
-                } else {
-                    res.status(500).send('passw_incorrect');
-                }
+
+    if (!req.body.username) {
+        res.status(500).send({   // ==res.json()
+            code: 500,
+            msg: 'No username!'
+        });
+    } else if (!req.body.password) {
+        res.status(500).send({   // ==res.json()
+            code: 500,
+            msg: 'No password!'
+        });
+    }else{
+        User.findOne({username: req.body.username}, function (err, user) {
+
+            if (err) {
+                res.status(500).send('internal_server_error');
             } else {
-                res.status(500).send('user_not_found');
+                if (user) {
+                    console.log("USER:  "+user);
+                    //bcrypt.compareSync(req.body.password, user.password)
+                    user.comparePassword(req.body.password, function (err, isMatch) {
+                        if (err) { return console.log(err) }
+                        // 密码不匹配
+                        if (!isMatch) {
+                            return res.status(500).json({
+                                error: 'invaild username or password'
+                            })
+                        }else{
+                            // 匹配成功
+                            let token = generaTokenUser(user._id, req);
+                            console.log('token:' + token);
+                            user["password"] = null;
+                            console.log('myname:'+user.username);
+                            return res.status(200).send({
+                                code:200,
+                                type: true,
+                                data: user,
+                                token: token
+                            });
+                        }
+                    })
+                } else {
+                    res.status(500).send({   // ==res.json()
+                        code: 500,
+                        msg: 'User not found!'
+                    });
+                }
             }
-        }
-    });
+        });
+    }
+
+
 };
 exports.get = function (req, res) {
     User.findOne({username: req.params.username}, function (err, user) {
@@ -120,7 +146,7 @@ exports.signin = function (req, res) {
         } else {
             user.password = 'haha,I will call 110!';
             res.status(200).send({
-                type: true,
+                code: 200,
                 data: user,
                 token: generaTokenUser(user._id, req)
             })

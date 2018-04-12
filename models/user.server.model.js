@@ -30,6 +30,12 @@ exports = module.exports = function(mongoose) {
             required: false,
             trim: true
         },
+        username:{
+            type: String,
+            unique: true,
+            required: false,
+            trim: true
+        },
         userCountry: {
             type: String
         },
