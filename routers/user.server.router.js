@@ -7,7 +7,7 @@ module.exports = function(app, express, controllers) {
 
     user.route('/authenticate').post(controllers.user.authenticate);
     user.route('/test')
-            .post(jwtAuth.getTokenAndVertify, controllers.user.test);
+            .post(jwtAuth.getTokenAndVertify, controllers.user.authenticate); // 验证token失效
     user.route('/signin')
             .post(controllers.user.signin)
             .put(controllers.user.UserAccess(false),controllers.user.edit);
