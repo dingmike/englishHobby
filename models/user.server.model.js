@@ -3,16 +3,24 @@ const bcrypt = require('bcryptjs')
 let uniqueValidator = require('mongoose-unique-validator');
 const mongooseStringQuery = require('mongoose-string-query');
 const timestamps = require('mongoose-timestamp');
+// const uuidv1 = require('uuid/v1');
+const uuidv4 = require('uuid/v4');
 exports = module.exports = function(mongoose) {
     Schema = mongoose.Schema;
     let UserSchema = new Schema({
         unionid:{
             type: String,
-            unique: true
+            unique: true,
+            default: () => {
+                return uuidv4();
+            }
         },
         openid:{
             type: String,
-            unique: true
+            unique: true,
+            default: () => {
+                return uuidv4();
+            }
         },
         email: {
             type: String,
@@ -94,8 +102,7 @@ exports = module.exports = function(mongoose) {
         },
         redeemedGift: [{ type: Schema.Types.ObjectId, ref: 'UserGiftOrder' }]
 
-    });
-
+    },{ _id: true, autoIndex: false }); // setting schema options{ _id: true, autoIndex: false }
 
     // schema static method  //page fetch  one page has 5 default data
     UserSchema.statics = {

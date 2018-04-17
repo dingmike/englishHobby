@@ -1,4 +1,3 @@
-
 let bcrypt = require('bcryptjs');
 let moment = require('moment');
 let async = require('async');
@@ -149,19 +148,64 @@ exports.signin = function (req, res) {
     userModel.email = data.email;
     userModel.password = data.password;
     // userModel.password = bcrypt.hashSync(data.password);
-    userModel.save(function (err, user) {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            user.password = 'Haha,I will call 110!';
-            res.status(200).send({
-                code: 200,
-                data: user,
-                token: jwtAuth.generaTokenUser(user._id, req),
-                msg: 'Login successful!'
+
+    if (data) {
+        if (data.roles) { //防止非法注册带权限
+           return res.status(401).send({
+                code: 401,
+                msg: 'No permission!'
             })
         }
-    });
+
+        if (!data.username) {
+            return res.status(500).send({   // ==res.json()
+                code: 500,
+                msg: '用户名必填!'
+            });
+        } else if (!data.password) {
+            return res.status(500).send({   // ==res.json()
+                code: 500,
+                msg: '密码必填!'
+            });
+        }else if (!data.email) {
+            return res.status(500).send({   // ==res.json()
+                code: 500,
+                msg: 'Email必填!'
+            });
+        }
+
+        User.findOne({"$or":[{username: data.username}, {email:data.email}]},function(err, userDoc){
+            if (err) {
+               return res.status(500).send(err);
+            }
+            if(userDoc){
+                return res.status(500).send({
+                    code: 500,
+                    msg: '用户名或者邮箱已被注册!'
+                })
+            } else {
+                userModel.save(function (err, user) {
+                    if (err) {
+                        res.status(500).send(err);
+                    } else {
+                        user.password = 'Haha, I will call 110!';
+                        res.status(200).send({
+                            code: 200,
+                            data: user,
+                            token: jwtAuth.generaTokenUser(user._id, req),
+                            msg: 'Login successful!'
+                        })
+                    }
+                });
+            }
+
+        });
+
+
+
+
+    }
+
 };
 let generaTokenUser = function (id_user, req) {
     // Moment.js被用来设置token将在3天之后失效。
