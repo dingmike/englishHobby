@@ -6,13 +6,18 @@ let User = mongoose.model('users');
 let requestIp = require('request-ip');
 let SECRET_TOKEN = "GUSTA_O0000";
 let jwtAuth = require('../app/libs/jwt');
+let util = require('../app/libs/util');
 
 exports.authenticate = function (req, res) {
     console.log('Start login in the system..............');
-    /* if (!req.is('application/json')) {
-     return next(
-     res.status(500).send('application/json only!')
-     )
+    console.log('hjehe:' + req.is('application/json'))
+    console.log('IPREAL:' +  util.getClientIp(req))
+
+
+    console.log('Request IP :' +req.ip)
+    console.log('Request IPs :' +req.ips)
+   /*  if (!req.is('application/json')) {
+         return  res.status(500).send('application/json only!')
      }*/
     console.log('req+++++++++' + req.body);
     console.log(req.originalUrl); // '/admin/new'
@@ -25,11 +30,10 @@ exports.authenticate = function (req, res) {
     console.log('req.body:  ' + req.body.username);  // 取body内容数据
     console.log('req.query:  ' + req.query.usernames); //取参数req.query
 
-
     if (!req.body.username) {
         res.status(500).send({   // ==res.json()
             code: 500,
-            msg: 'No username!'
+            msg: 'No username or email!'
         });
     } else if (!req.body.password) {
         res.status(500).send({   // ==res.json()
@@ -37,7 +41,8 @@ exports.authenticate = function (req, res) {
             msg: 'No password!'
         });
     } else {
-        User.findOne({username: req.body.username}, function (err, user) {
+        // 用户名和email均可以登录
+        User.findOne({"$or":[{username: req.body.username}, {email:req.body.username}]}, function (err, user) {
             if (err) {
                 res.status(500).send(
                     {
@@ -228,7 +233,7 @@ let getToken = function (req, next) {
             if ((token.payload.exp <= moment().unix())) {
                 next('token_expire')
             } else {
-                //verificando mismo host de usuario
+                //验证客户端是否更换IP登录
                 if (token.payload.host !== requestIp.getClientIp(req)) {
                     next('token_host_invalid')
                 } else {

@@ -20,7 +20,7 @@ let config = {
         "optionsSuccessStatus": 204
     },
     SECRET_TOKEN: 'dingmike#123',
-    expireDays: 7,
+    expireDays: 7, // token 失效时间7days
     porthttp: process.env.PORT || 3311,
     SSLPORT: process.env.PORT || 8080,
     multicore: false, // 多线程运行
