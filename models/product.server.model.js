@@ -14,7 +14,7 @@ exports = module.exports = function (mongoose) {
             type: String,
             required: true
         },
-        characteristic: {
+        characteristic: { // 描述
             type: String,
             unique: true,
             required: true,
