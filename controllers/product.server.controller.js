@@ -12,56 +12,66 @@ exports.add = function (req, res) {
 
     console.log('req.body:  ' + req.body.name);  // 取body内容数据
     console.log('req.query:  ' + req.query.name); //取参数req.query
-
-    if (!req.body.name) {
+    let data = req.body;
+    if (!data.name) {
         res.status(500).send({   // ==res.json()
             code: 500,
             msg: 'Product name required!'
         });
-    } else if (!req.body.categoryId) {
+    } else if (!data.categoryId) {
         res.status(500).send({   // ==res.json()
             code: 500,
             msg: 'Product category required!'
         });
-    } else if (!req.body.characteristic) {
+    } else if (!data.characteristic) {
         res.status(500).send({   // ==res.json()
             code: 500,
             msg: 'Product characteristic required!'
         });
-    }else if (!req.body.commission) {
+    }else if (!data.commission) {
         res.status(500).send({   // ==res.json()
             code: 500,
             msg: 'Product commission required!'
         });
-    }else if (!req.body.commissionType) {
+    }else if (!data.commissionType) {
         res.status(500).send({   // ==res.json()
             code: 500,
             msg: 'Product commissionType required!'
         });
-    }else if (!req.body.minPrice) {
+    }else if (!data.minPrice) {
         res.status(500).send({   // ==res.json()
             code: 500,
             msg: 'Product minPrice required!'
         });
-    }else if (!req.body.minScore) {
+    }else if (!data.minScore) {
         res.status(500).send({   // ==res.json()
             code: 500,
             msg: 'Product minScore required!'
         });
-    }else if (!req.body.numberGoodReputation) {
+    }else if (!data.numberGoodReputation) {
         res.status(500).send({   // ==res.json()
             code: 500,
             msg: 'Product numberGoodReputation required!'
         });
-    }else if (!req.body.originalPrice) {
+    }else if (!data.originalPrice) {
         res.status(500).send({   // ==res.json()
             code: 500,
             msg: 'Product originalPrice required!'
         });
+    }else if (!data.pic) {
+        res.status(500).send({   // ==res.json()
+            code: 500,
+            msg: 'Product pic required!'
+        });
+    }else if (!data.stores) {
+        res.status(500).send({   // ==res.json()
+            code: 500,
+            msg: 'Product stores required!'
+        });
     }
     else {
         // 用户名和email均可以登录
-        Product.findOne({"$or": [{username: req.body.username}, {email: req.body.username}]}, function (err, user) {
+        Product.findOne({name: data.name}, function (err, productDoc) {
             if (err) {
                 res.status(500).send(
                     {
@@ -69,37 +79,16 @@ exports.add = function (req, res) {
                         msg: 'Internal server error!'
                     });
             } else {
-                if (user) {
-                    console.log("USER:  " + user);
-                    //bcrypt.compareSync(req.body.password, user.password)
-                    user.comparePassword(req.body.password, function (err, isMatch) {
-                        if (err) {
-                            return console.log(err)
-                        }
-                        // 密码不匹配
-                        if (!isMatch) {
-                            return res.status(500).json({
-                                code: 500,
-                                msg: 'Invaild username or password!'
-                            })
-                        } else {
-                            // 匹配成功
-                            let token = jwtAuth.generaTokenUser(user._id, req);
-                            console.log('token:' + token);
-                            user["password"] = null;
-                            console.log('myname:' + user.username);
-                            return res.status(200).send({
-                                code: 200,
-                                data: user,
-                                token: token
-                            });
-                        }
-                    })
-                } else {
-                    res.status(500).send({   // ==res.json()
+                if (productDoc) {
+                    return res.status(500).send({
                         code: 500,
-                        msg: 'User not found!'
+                        msg: '商品名称已存在！'
                     });
+                } else {
+                    let productModel = new Product(data);
+                    productModel.save(function (err, doc) {
+
+                    })
                 }
             }
         });

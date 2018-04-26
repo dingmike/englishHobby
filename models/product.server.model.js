@@ -64,6 +64,7 @@ exports = module.exports = function (mongoose) {
         },
         shopId: {
             type: String,
+            required: true,
         },
         status: { // 上架状态
             type: Number,
@@ -77,23 +78,17 @@ exports = module.exports = function (mongoose) {
             type: Number,
             default: 0
         },
-        userId: {  //
+        userId: {  // 用户ID
             type: String,
         },
         videoId: {  //
             type: String,
         },
-        views: {  //
+        views: {  //浏览数量
             type: Number,
         },
-        weight: {  //
+        weight: {  //质量
             type: Number,
-        },
-        key: {
-            type: String,
-            unique: true,
-            required: false,
-            default:'mallName'
         }
     }, {_id: true, autoIndex: false}); // setting schema options{ _id: true, autoIndex: false }
 
