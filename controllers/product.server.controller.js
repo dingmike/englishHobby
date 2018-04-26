@@ -10,9 +10,28 @@ let util = require('../app/libs/util');
 
 exports.add = function (req, res) {
 
-    console.log('req.body:  ' + req.body.name);  // 取body内容数据
-    console.log('req.query:  ' + req.query.name); //取参数req.query
+    console.log('req.body: ' + req.body.name);   // 取body内容数据
+    console.log('req.query: ' + req.query.name); // 取参数req.query
     let data = req.body;
+    if (data.hasOwnProperty('status')) {
+        data.statusStr = data.status == 1 ? '上架' : '下架';
+    }
+    if (data.hasOwnProperty('recommendStatus')) {
+        data.statusStr = data.status == 1 ? '上架' : '下架';
+        switch (data.recommendStatus) {
+            case 0 :
+                data.recommendStatusStr = '普通';
+                break;
+            case 1 :
+                data.recommendStatusStr = '今日推荐';
+                break;
+            case 2 :
+                data.recommendStatusStr = '优惠商品';
+                break;
+            default:
+                break;
+        }
+    }
     if (!data.name) {
         res.status(500).send({   // ==res.json()
             code: 500,
@@ -28,48 +47,49 @@ exports.add = function (req, res) {
             code: 500,
             msg: 'Product characteristic required!'
         });
-    }else if (!data.commission) {
+    } else if (!data.commission) { //佣金
         res.status(500).send({   // ==res.json()
             code: 500,
             msg: 'Product commission required!'
         });
-    }else if (!data.commissionType) {
+    } else if (!data.commissionType) {
         res.status(500).send({   // ==res.json()
             code: 500,
             msg: 'Product commissionType required!'
         });
-    }else if (!data.minPrice) {
+    } else if (!data.minPrice) {
         res.status(500).send({   // ==res.json()
             code: 500,
             msg: 'Product minPrice required!'
         });
-    }else if (!data.minScore) {
+    } else if (!data.minScore) {
         res.status(500).send({   // ==res.json()
             code: 500,
             msg: 'Product minScore required!'
         });
-    }else if (!data.numberGoodReputation) {
+    } else if (!data.numberGoodReputation) {
         res.status(500).send({   // ==res.json()
             code: 500,
             msg: 'Product numberGoodReputation required!'
         });
-    }else if (!data.originalPrice) {
+    } else if (!data.originalPrice) {
         res.status(500).send({   // ==res.json()
             code: 500,
             msg: 'Product originalPrice required!'
         });
-    }else if (!data.pic) {
+    } else if (!data.pic) {
         res.status(500).send({   // ==res.json()
             code: 500,
             msg: 'Product pic required!'
         });
-    }else if (!data.stores) {
+    } else if (!data.stores) {
         res.status(500).send({   // ==res.json()
             code: 500,
             msg: 'Product stores required!'
         });
-    }
-    else {
+    } else {
+
+        let product = new Product(data);
         // 用户名和email均可以登录
         Product.findOne({name: data.name}, function (err, productDoc) {
             if (err) {
@@ -85,9 +105,16 @@ exports.add = function (req, res) {
                         msg: '商品名称已存在！'
                     });
                 } else {
-                    let productModel = new Product(data);
-                    productModel.save(function (err, doc) {
-
+                    product.save(function (err, doc) {
+                        if (err) {
+                            res.status(500).send(err);
+                        } else {
+                            res.status(200).send({
+                                code: 200,
+                                data: doc,
+                                msg: 'success!'
+                            })
+                        }
                     })
                 }
             }
@@ -97,18 +124,158 @@ exports.add = function (req, res) {
 
 };
 exports.get = function (req, res) {
-    User.findOne({username: req.params.username}, function (err, user) {
+
+    Product.findOne({_id: req.query._id}, {}, function (err, productDoc) {
         if (err) {
             res.status(500).send('internal_server_error');
         } else {
-            if (user) {
-                res.status(200).send(user)
+            if (productDoc) {
+                res.status(200).send({
+                    code: 200,
+                    data: productDoc,
+                    msg: 'success!'
+                })
             } else {
-                res.status(500).send('user_not_found');
+                res.status(500).send({
+                    code: 500,
+                    msg: 'Product not found!'
+                });
             }
         }
     });
 };
+exports.getList = function (req, res) {
+
+    let params = req.body;
+    //pager; get pages of the product
+    Product.count({}, (err, count) => {
+        if (err) {
+            res.status(500).send('internal_server_error');
+        }
+        Product.fetch(params._id, parseInt(params.pages), params.sortNum, (err, docArr) => {
+            if (err) {
+                res.status(500).send('internal_server_error');
+            }
+            console.log('totalUserCounts: ' + count);
+            res.status(200).send({
+                code: 200,
+                data: docArr,
+                pages: req.body.pages,
+                totalPages: count,
+                msg: 'success'
+            })
+        })
+    });
+
+
+};
+exports.edit = function (req, res) {
+    console.log('req.body:  ' + req.body.name);  // 取body内容数据
+    console.log('req.query:  ' + req.query.name); //取参数req.query
+    let data = req.body;
+
+    if (data.hasOwnProperty('status')) {
+        data.statusStr = data.status == 1 ? '上架' : '下架';
+    }
+    if (data.hasOwnProperty('recommendStatus')) {
+        data.statusStr = data.status == 1 ? '上架' : '下架';
+        switch (data.recommendStatus) {
+            case '0' :
+                data.recommendStatusStr = '普通';
+                break;
+            case '1' :
+                data.recommendStatusStr = '今日推荐';
+                break;
+            case '2' :
+                data.recommendStatusStr = '优惠商品';
+                break;
+            default:
+                break;
+        }
+    }
+    if (!data.name) {
+        res.status(500).send({   // ==res.json()
+            code: 500,
+            msg: 'Product name required!'
+        });
+    } else if (!data.categoryId) {
+        res.status(500).send({   // ==res.json()
+            code: 500,
+            msg: 'Product category required!'
+        });
+    } else if (!data.characteristic) {
+        res.status(500).send({   // ==res.json()
+            code: 500,
+            msg: 'Product characteristic required!'
+        });
+    } else if (!data.commission) { //佣金
+        res.status(500).send({   // ==res.json()
+            code: 500,
+            msg: 'Product commission required!'
+        });
+    } else if (!data.commissionType) {
+        res.status(500).send({   // ==res.json()
+            code: 500,
+            msg: 'Product commissionType required!'
+        });
+    } else if (!data.minPrice) {
+        res.status(500).send({   // ==res.json()
+            code: 500,
+            msg: 'Product minPrice required!'
+        });
+    } else if (!data.minScore) {
+        res.status(500).send({   // ==res.json()
+            code: 500,
+            msg: 'Product minScore required!'
+        });
+    } else if (!data.numberGoodReputation) {
+        res.status(500).send({   // ==res.json()
+            code: 500,
+            msg: 'Product numberGoodReputation required!'
+        });
+    } else if (!data.originalPrice) {
+        res.status(500).send({   // ==res.json()
+            code: 500,
+            msg: 'Product originalPrice required!'
+        });
+    } else if (!data.pic) {
+        res.status(500).send({   // ==res.json()
+            code: 500,
+            msg: 'Product pic required!'
+        });
+    } else if (!data.stores) {
+        res.status(500).send({   // ==res.json()
+            code: 500,
+            msg: 'Product stores required!'
+        });
+    } else {
+        if (data._id) {
+            Product.update({_id: data._id}, {$set: data}, function (err, updateDoc) {
+                if (err) {
+                    return res.send(500, err.message);
+                } else {
+                    console.log('success: ' + updateDoc.ok); // {"n": 1, "nModified": 1,"ok": 1}
+                    if (updateDoc.ok === 1) {
+                        res.status(200).send({
+                            code: 200,
+                            data: updateDoc,
+                            msg: 'success'
+                        });
+                    }
+                }
+            });
+        } else {
+            res.status(500).send({   // ==res.json()
+                code: 500,
+                msg: 'Product ID required!'
+            });
+        }
+
+    }
+};
+
+// 上架状态status status 0下架，1下架 statusStr
+
 exports.test = function (req, res) {
 
     //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoiNWFjZWY4ZmJjOTM4ZDEzNDZjOTk1NGUwIiwiaWF0IjoxNTIzNTIxNzU1LCJleHAiOjE1MjM3ODA5NTUsImhvc3QiOiI6OmZmZmY6MTkyLjE2OC4xNi4xOTgifQ.VLicGl21o7-nrmb8N5jU9EGiz4OJFeKSzlb-d27t_lo
@@ -126,35 +293,7 @@ exports.test = function (req, res) {
         });
     })
 };
-exports.edit = function (req, res) {
-    let data = req.body;
-    let id = '';
-    if (data._id) {
-        // editando usuario
-        id = data._id;
-        delete data['_id'];
-        // actualizando nuevo pass el usuario admin agrego al formulario editar la contrasenna
-        if (data.password !== "") {
-            console.log('password edit');
-            data.password = bcrypt.hashSync(data.password);
-        } else {
-            delete data['password'];
-        }
-        console.log(data);
-        User.update(
-            {_id: id},
-            {
-                $set: data
-            }, function (err, user) {
-                if (err) {
-                    return res.send(500, err.message);
-                } else {
-                    console.log(user);
-                    res.status(200).jsonp('ok');
-                }
-            });
-    }
-};
+
 exports.signin = function (req, res) {
     let data = req.body;
     let userModel = new User(data);

@@ -6,6 +6,9 @@ const timestamps = require('mongoose-timestamp');
 const uuidv4 = require('uuid/v4');
 exports = module.exports = function (mongoose) {
     Schema = mongoose.Schema;
+
+    //If this conflicts with your application you can configure as such:(可以自定义版本号)
+    // new Schema({..}, { versionKey: '_somethingElse' })
     let ProductSchema = new Schema({
         name: {
           type: String
@@ -16,7 +19,7 @@ exports = module.exports = function (mongoose) {
         },
         characteristic: { // 描述
             type: String,
-            unique: true,
+            unique: false,
             required: true,
             trim: true
         },
@@ -30,7 +33,8 @@ exports = module.exports = function (mongoose) {
             type: Number
         },
         minPrice: {  // 最低价格
-            type: Number
+            type: Number,
+            required: true
         },
         minScore: {  // 最低积分
             type: Number
@@ -51,7 +55,7 @@ exports = module.exports = function (mongoose) {
             type: Number,
             defult: 0
         },
-        recommendStatus: { // 推荐状态
+        recommendStatus: { // 推荐状态 0：普通，1：今日推荐，2：优惠商品
             type: Number,
             defult: 0
         },
@@ -61,14 +65,15 @@ exports = module.exports = function (mongoose) {
         },
         pic: {
             type: String,
+            required: true
         },
         shopId: {
             type: String,
             required: true,
         },
-        status: { // 上架状态
+        status: { // 上架状态 0 下架 ，1 上架
             type: Number,
-            default: 0
+            default: 1
         },
         statusStr: {
             type: String,
@@ -95,19 +100,20 @@ exports = module.exports = function (mongoose) {
     // schema static method  //page fetch  one page has 5 default data
     ProductSchema.statics = {
         fetch(id, pages, sortNum, cb) {
-            let pageSize = pages || 5;
-            let sortKind = sortNum || -1;
+            console.log('pages: ' + pages)
+            let pageSize = pages||5;
+            let sortKind = sortNum || -1; // id：-1时间倒叙
             if (id) {
                 return this.find({'_id': {"$lt": id}})
-                    .select('_id createdAt userId shopName dateType remark key')
+                    .select({})    //.select('_id createdAt userId shopName dateType remark key')
                     .limit(pageSize)
-                    .sort({'_id': -1})
+                    .sort({'_id': sortKind})
                     .exec(cb);
             } else {
                 return this.find({})
-                    .select('_id createdAt userId shopName dateType remark key')
+                    .select({})
                     .limit(pages)
-                    .sort({'_id': -1})
+                    .sort({'_id': sortKind})
                     .exec(cb);
             }
 
