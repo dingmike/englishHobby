@@ -2,7 +2,7 @@
 let uuid = require('node-uuid');
 
 exports = module.exports = function(mongoose) {
-    Schema = mongoose.Schema;
+    let Schema = mongoose.Schema;
     let acl_roleSchema = new Schema({
         id:{
             type:'string',

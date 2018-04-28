@@ -5,7 +5,7 @@ const timestamps = require('mongoose-timestamp');
 // const uuidv1 = require('uuid/v1');
 const uuidv4 = require('uuid/v4');
 exports = module.exports = function (mongoose) {
-    Schema = mongoose.Schema;
+    let Schema = mongoose.Schema;
 
     //If this conflicts with your application you can configure as such:(可以自定义版本号)
     // new Schema({..}, { versionKey: '_somethingElse' })
@@ -100,7 +100,7 @@ exports = module.exports = function (mongoose) {
     // schema static method  //page fetch  one page has 5 default data
     ProductSchema.statics = {
         fetch(id, pages, sortNum, cb) {
-            console.log('pages: ' + pages)
+            console.log('pages: ' + pages);
             let pageSize = pages||5;
             let sortKind = sortNum || -1; // id：-1时间倒叙
             if (id) {
@@ -112,7 +112,7 @@ exports = module.exports = function (mongoose) {
             } else {
                 return this.find({})
                     .select({})
-                    .limit(pages)
+                    .limit(pageSize)
                     .sort({'_id': sortKind})
                     .exec(cb);
             }

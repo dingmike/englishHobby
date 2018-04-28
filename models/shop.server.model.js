@@ -6,7 +6,7 @@ const timestamps = require('mongoose-timestamp');
 // const uuidv1 = require('uuid/v1');
 const uuidv4 = require('uuid/v4');
 exports = module.exports = function (mongoose) {
-    Schema = mongoose.Schema;
+    let Schema = mongoose.Schema;
     let ShopSchema = new Schema({
         userId: {
             type: String,

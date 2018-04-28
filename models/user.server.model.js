@@ -6,7 +6,7 @@ const timestamps = require('mongoose-timestamp');
 // const uuidv1 = require('uuid/v1');
 const uuidv4 = require('uuid/v4');
 exports = module.exports = function(mongoose) {
-    Schema = mongoose.Schema;
+    let Schema = mongoose.Schema;
     let UserSchema = new Schema({
         unionid:{
             type: String,
@@ -53,8 +53,10 @@ exports = module.exports = function(mongoose) {
         userCity:{
             type: String
         },
+        shipAddress: [{ type: Schema.Types.ObjectId, ref: 'address' }], // 收货地址集合
         password: {
-            type: String
+            type: String,
+            trim: true
         },
         roles: {
             type: Array,
@@ -99,8 +101,7 @@ exports = module.exports = function(mongoose) {
             type: Number,
             required: false,
             default: 0    //0 ：可以使用积分，1：不可以使用
-        },
-        redeemedGift: [{ type: Schema.Types.ObjectId, ref: 'UserGiftOrder' }]
+        }
 
     },{ _id: true, autoIndex: false }); // setting schema options{ _id: true, autoIndex: false }
 

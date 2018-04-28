@@ -2,7 +2,7 @@
 let uuid = require('node-uuid');
 let uniqueValidator = require('mongoose-unique-validator');
 exports = module.exports = function(mongoose) {
-    Schema = mongoose.Schema;
+    let Schema = mongoose.Schema;
     let Acl_userSchema = new Schema({
         email: {
             type: String,

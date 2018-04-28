@@ -6,102 +6,51 @@ const timestamps = require('mongoose-timestamp');
 // const uuidv1 = require('uuid/v1');
 const uuidv4 = require('uuid/v4');
 exports = module.exports = function(mongoose) {
-    Schema = mongoose.Schema;
+    let Schema = mongoose.Schema;
     let AddressSchema = new Schema({
-        unionid:{
+        userId: { type: Schema.Types.ObjectId, ref: 'users' },
+        userName:{
             type: String,
-            unique: true,
-            default: () => {
-                return uuidv4();
-            }
+            trim: true
         },
-        openid:{
+        userPhone: {
             type: String,
-            unique: true,
-            default: () => {
-                return uuidv4();
-            }
-        },
-        email: {
-            type: String,
-            match: [/.+\@.+\..+/, "invalid_email_address"],
+            match: [/^1[34578]\d{9}$/, "invalid_phone"],
             unique: true,
             required: false
         },
-        headimgurl: {
-            type: String,
-            default: '50x50defaultAvatar.png'
-        },
-        nickname: {
-            type: String,
-            unique: true,
-            required: false,
-            trim: true
-        },
-        username:{
-            type: String,
-            unique: true,
-            required: false,
-            trim: true
-        },
-        userCountry: {
-            type: String
-        },
-        userProvince: {
-            type: String
-        },
-        userCity:{
-            type: String
-        },
-        password: {
-            type: String
-        },
-        roles: {
-            type: Array,
-            required: false,
-            default: ['user']   // role: user, admin, editor
-        },
-        age: Number,
-        sex: String,  //用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
-        score: {
-            type: Number,
-            required: false,
-            default: 0
-        },
-        realName: {
+        province: {
             type: String,
             required: false,
             trim: true
         },
-        realAddress: {
+        city: {
             type: String,
-            required: false
+            required: false,
+            trim: true
         },
-        phone: {
-            type: Number,
-            required: false
+        county:{
+            type: String,
+            required: false,
+            trim: true
         },
-        money: {
-            type: Number,
-            required: false
+        address: {
+            type: String,
+            required: false,
+            trim: true
         },
-        readPages: {
+        postCode: {
+            type: Number
+        },
+        isDefault: {
             type: Number,
             required: false,
-            default: 0
+            default: 0   // 0: 否, 1, 是
         },
-        isAnswerToday: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        enableScore: {
+        addressFlag: {
             type: Number,
-            required: false,
-            default: 0    //0 ：可以使用积分，1：不可以使用
-        },
-        redeemedGift: [{ type: Schema.Types.ObjectId, ref: 'UserGiftOrder' }]
-
+            defult: 1   // -1: 删除，  1：有效
+        }
     },{ _id: true, autoIndex: false }); // setting schema options{ _id: true, autoIndex: false }
 
     // schema static method  //page fetch  one page has 5 default data

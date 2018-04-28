@@ -12,13 +12,13 @@ let util = require('../app/libs/util');
 exports.authenticate = function (req, res) {
     console.log('Start login in the system..............');
     console.log('hjehe:' + req.is('application/json'))
-    console.log('IPREAL:' +  util.getClientIp(req))
+    console.log('IPREAL:' + util.getClientIp(req))
 
 
-    console.log('Request IP :' +req.ip)
-    console.log('Request IPs :' +req.ips)
-   /*  if (!req.is('application/json')) {
-         return  res.status(500).send('application/json only!')
+    console.log('Request IP :' + req.ip)
+    console.log('Request IPs :' + req.ips)
+    /*  if (!req.is('application/json')) {
+     return  res.status(500).send('application/json only!')
      }*/
     console.log('req+++++++++' + req.body);
     console.log(req.originalUrl); // '/admin/new'
@@ -43,7 +43,7 @@ exports.authenticate = function (req, res) {
         });
     } else {
         // 用户名和email均可以登录
-        User.findOne({"$or":[{username: req.body.username}, {email:req.body.username}]}, function (err, user) {
+        User.findOne({"$or": [{username: req.body.username}, {email: req.body.username}]}, function (err, user) {
             if (err) {
                 res.status(500).send(
                     {
@@ -119,102 +119,123 @@ exports.test = function (req, res) {
         });
     })
 };
-exports.edit = function (req, res) {
+
+exports.delete = (req , res)=>{
     let data = req.body;
-    let id = '';
-    if (data._id) {
-        // editando usuario
-        id = data._id;
-        delete data['_id'];
-        // actualizando nuevo pass el usuario admin agrego al formulario editar la contrasenna
-        if (data.password !== "") {
-            console.log('password edit');
-            data.password = bcrypt.hashSync(data.password);
-        } else {
-            delete data['password'];
-        }
-        console.log(data);
-        User.update(
-            {_id: id},
-            {
-                $set: data
-            }, function (err, user) {
-                if (err) {
-                    return res.send(500, err.message);
-                } else {
-                    console.log(user);
-                    res.status(200).jsonp('ok');
-                }
+    let address = new Address(data);
+    if(data){
+        if (!data.userId) {
+            return res.status(500).send({   // ==res.json()
+                code: 500,
+                msg: '没有用户ID!'
             });
+        }if (!data.addressId) {
+            return res.status(500).send({   // ==res.json()
+                code: 500,
+                msg: '没有收获信息ID!'
+            });
+        }
+        User.findById(data.userId, (errm, userDoc) => {
+            if (err) {
+                return res.status(500).send(err);
+            }
+            let shipAddressArr = userDoc.shipAddress;
+            for(let i =0; i<shipAddressArr.length; i++){
+                if(shipAddressArr[i] === data.addressId){
+                    shipAddressArr.remove(data.addressId);
+                    Address.remove()
+                }
+            }
+
+
+        })
     }
 };
-exports.signin = function (req, res) {
+Array.prototype.remove = function(val) {
+    let index = this.indexOf(val);
+    if (index > -1) {
+        this.splice(index, 1);
+    }
+};
+exports.add = function (req, res) {
     let data = req.body;
-    let userModel = new User(data);
-    userModel.email = data.email;
-    userModel.password = data.password;
-    // userModel.password = bcrypt.hashSync(data.password);
-
+    let address = new Address(data);
     if (data) {
-        if (data.roles) { //防止非法注册带权限
-           return res.status(401).send({
-                code: 401,
-                msg: 'No permission!'
-            })
+        if (!data.userId) {
+            return res.status(500).send({   // ==res.json()
+                code: 500,
+                msg: '没有用户ID!'
+            });
+        } else if (!data.userPhone) {
+            return res.status(500).send({   // ==res.json()
+                code: 500,
+                msg: '手机号必填!'
+            });
+        } else if (!data.userName) {
+            return res.status(500).send({   // ==res.json()
+                code: 500,
+                msg: '收货人姓名必填!'
+            });
+        } else if (!data.province) {
+            return res.status(500).send({   // ==res.json()
+                code: 500,
+                msg: '省必填!'
+            });
+        } else if (!data.city) {
+            return res.status(500).send({   // ==res.json()
+                code: 500,
+                msg: '市必填!'
+            });
+        } else if (!data.county) {
+            return res.status(500).send({   // ==res.json()
+                code: 500,
+                msg: '区县必填!'
+            });
+        } else if (!data.address) {
+            return res.status(500).send({   // ==res.json()
+                code: 500,
+                msg: '详细地址必填!'
+            });
         }
 
-        if (!data.username) {
-            return res.status(500).send({   // ==res.json()
-                code: 500,
-                msg: '用户名必填!'
-            });
-        } else if (!data.password) {
-            return res.status(500).send({   // ==res.json()
-                code: 500,
-                msg: '密码必填!'
-            });
-        }else if (!data.email) {
-            return res.status(500).send({   // ==res.json()
-                code: 500,
-                msg: 'Email必填!'
-            });
-        }
-
-        User.findOne({"$or":[{username: data.username}, {email:data.email}]},function(err, userDoc){
+        Address.findOne({_id: data._id}, (err, addressDoc) => {
             if (err) {
-               return res.status(500).send(err);
+                return res.status(500).send(err);
             }
-            if(userDoc){
+            if (addressDoc) {
                 return res.status(500).send({
                     code: 500,
-                    msg: '用户名或者邮箱已被注册!'
+                    msg: '收货信息已存在！'
                 })
             } else {
-                userModel.save(function (err, user) {
+                address.save((err, newAddress) => {
                     if (err) {
                         res.status(500).send(err);
                     } else {
-                        user.password = 'Haha, I will call 110!';
-                        let address = new Address({
-                            userId:user._id
-                        });
-                        address.save(err=>{
-                            if(err){
-                                res.status(500).send(err);
-                            }else{
-                                res.status(200).send({
-                                    code: 200,
-                                    data: user,
-                                    token: jwtAuth.generaTokenUser(user._id, req),
-                                    msg: 'Login successful!'
-                                })
+                        // 查询用户信息插入收货信息
+                        User.findById(data.userId, (err, userDoc) => {
+                            if (err) {
+                                return res.status(500).send(err);
                             }
-                        });
+                            if (userDoc) {
+                                userDoc.shipAddress.push(newAddress._id);
+                                userDoc.save( err => {
+                                    if (err) {
+                                        res.status(500).send(err);
+                                    } else {
+                                        res.status(200).send({
+                                            code: 200,
+                                            msg: 'Save successful!'
+                                        })
+                                    }
+                                })
 
+                            }
+
+                        })
                     }
                 });
             }
-
         });
 
     }
@@ -280,54 +301,3 @@ exports.UserAccess = function (perm) {
         })
     }
 };
-let InstallInit = function () {
-    setTimeout(function () {
-        User.count({}, function (err, count) {
-            if (count === 0) {
-                console.log('instalando usuario root');
-                // install user root admin
-                let data = {
-                    name: 'Ibis',
-                    username: 'ibis',
-                    password: 'tiquitiqui',
-                    email: 'gustayocs@gmail.com',
-                    firstName: 'Brito',
-                    lastName: 'Amaya',
-                    role: 'Admin',
-                    age: 25,
-                    sexo: 'f'
-                };
-                let userModel = new User(data);
-                userModel.password = bcrypt.hashSync(data.password);
-                userModel.save(function (err, user) {
-                    // console.log(user);
-                });
-
-                // instalando usuarios por efecto
-                let insert = new Array();
-                let pass = bcrypt.hashSync('asdfg')
-                for (var i = 20 - 1; i >= 0; i--) {
-                    let data = {
-                        name: 'user' + i,
-                        username: 'user' + i,
-                        password: pass,
-                        email: 'user' + i + '@gmail.com',
-                        firstName: 'user' + i,
-                        lastName: 'asd',
-                        role: 'asd',
-                        age: 25,
-                        sexo: 'f'
-                    };
-                    insert.push(new User(data));
-                }
-                ;
-                async.mapLimit(insert, 10, function (document, next) {
-                    document.save(next);
-                }, function () {
-                    console.log('instalados usuarios default')
-                });
-            }
-        })
-    }, 3000);
-};
-// InstallInit();
