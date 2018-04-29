@@ -26,7 +26,7 @@ exports = module.exports = function (mongoose) {
         commission: {  // 佣金
             type: Number
         },
-        commissionType: {
+        commissionType: {   //1: 一级佣金，2：二级，3： 三级
             type: Number
         },
         logisticsId: {  // 物流Id
@@ -42,7 +42,7 @@ exports = module.exports = function (mongoose) {
         numberFav: {  //
             type: Number
         },
-        numberGoodReputation: {  // 等级
+        numberGoodReputation: {  // 等级 1： 一级声望，2：二级声望
             type: Number
         },
         numberOrders: {  // 订单数量

@@ -148,6 +148,13 @@ exports.edit = function (req, res) {
             });
     }
 };
+
+/*
+* @params username password email
+*
+*
+*
+* */
 exports.signin = function (req, res) {
     let data = req.body;
     let userModel = new User(data);

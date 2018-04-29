@@ -8,6 +8,13 @@ let SECRET_TOKEN = "GUSTA_O0000";
 let jwtAuth = require('../app/libs/jwt');
 let util = require('../app/libs/util');
 
+
+/*
+* @params name status recommendStatus categoryId characteristic
+* commission commissionType minPrice minScore numberGoodReputation originalPrice
+* pic stores
+*
+* */
 exports.add = function (req, res) {
 
     console.log('req.body: ' + req.body.name);   // 取body内容数据
@@ -17,7 +24,6 @@ exports.add = function (req, res) {
         data.statusStr = data.status == 1 ? '上架' : '下架';
     }
     if (data.hasOwnProperty('recommendStatus')) {
-        data.statusStr = data.status == 1 ? '上架' : '下架';
         switch (data.recommendStatus) {
             case 0 :
                 data.recommendStatusStr = '普通';
@@ -41,6 +47,11 @@ exports.add = function (req, res) {
         res.status(500).send({   // ==res.json()
             code: 500,
             msg: 'Product category required!'
+        });
+    } else if (!data.shopId) {
+        res.status(500).send({   // ==res.json()
+            code: 500,
+            msg: 'Product shopId required!'
         });
     } else if (!data.characteristic) {
         res.status(500).send({   // ==res.json()

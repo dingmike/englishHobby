@@ -120,38 +120,50 @@ exports.test = function (req, res) {
     })
 };
 
-exports.delete = (req , res)=>{
+exports.delete = (req, res) => {
     let data = req.body;
-    let address = new Address(data);
-    if(data){
+    if (data) {
         if (!data.userId) {
             return res.status(500).send({   // ==res.json()
                 code: 500,
                 msg: '没有用户ID!'
             });
-        }if (!data.addressId) {
+        }
+        if (!data.addressId) {
             return res.status(500).send({   // ==res.json()
                 code: 500,
                 msg: '没有收获信息ID!'
             });
         }
-        User.findById(data.userId, (errm, userDoc) => {
+        User.findOne({_id: data.userId}, (err, userDoc) => {
             if (err) {
                 return res.status(500).send(err);
             }
             let shipAddressArr = userDoc.shipAddress;
-            for(let i =0; i<shipAddressArr.length; i++){
-                if(shipAddressArr[i] === data.addressId){
-                    shipAddressArr.remove(data.addressId);
-                    Address.remove()
+            shipAddressArr.remove(data.addressId);
+            Address.remove({_id: data.addressId}, (err, obj) => {
+                if (err) {
+                    return res.status(500).send(err);
                 }
-            }
+                userDoc.save(err => {
+                    if (err) {
+                        return res.status(500).send(err);
+                    }
+                    res.status(200).send({   // ==res.json()
+                        code: 200,
+                        data: obj,
+                        msg: 'delete successful'
+                    });
+                })
+
+
+            })
 
 
         })
     }
 };
-Array.prototype.remove = function(val) {
+Array.prototype.remove = function (val) {
     let index = this.indexOf(val);
     if (index > -1) {
         this.splice(index, 1);
@@ -170,6 +182,11 @@ exports.add = function (req, res) {
             return res.status(500).send({   // ==res.json()
                 code: 500,
                 msg: '手机号必填!'
+            });
+        }else if (!(/^1[34578]\d{9}$/.test(data.userPhone))) {
+            return res.status(500).send({   // ==res.json()
+                code: 500,
+                msg: '手机号格式不正确!'
             });
         } else if (!data.userName) {
             return res.status(500).send({   // ==res.json()
@@ -197,44 +214,32 @@ exports.add = function (req, res) {
                 msg: '详细地址必填!'
             });
         }
-
-        Address.findOne({_id: data._id}, (err, addressDoc) => {
+        address.save((err, newAddress) => {
             if (err) {
-                return res.status(500).send(err);
-            }
-            if (addressDoc) {
-                return res.status(500).send({
-                    code: 500,
-                    msg: '收货信息已存在！'
-                })
+                res.status(500).send(err);
             } else {
-                address.save((err, newAddress) => {
+                // 查询用户信息插入收货信息
+                User.findById(data.userId, (err, userDoc) => {
                     if (err) {
-                        res.status(500).send(err);
-                    } else {
-                        // 查询用户信息插入收货信息
-                        User.findById(data.userId, (err, userDoc) => {
-                            if (err) {
-                                return res.status(500).send(err);
-                            }
-                            if (userDoc) {
-                                userDoc.shipAddress.push(newAddress._id);
-                                userDoc.save( err => {
-                                    if (err) {
-                                        res.status(500).send(err);
-                                    } else {
-                                        res.status(200).send({
-                                            code: 200,
-                                            msg: 'Save successful!'
-                                        })
-                                    }
-                                })
-
-                            }
-
-                        })
+                        return res.status(500).send(err);
                     }
-                });
+                    if (userDoc) {
+                        userDoc.shipAddress.push(newAddress._id);
+                        userDoc.save(err => {
+                            if (err) {
+                                res.status(500).send(err);
+                            } else {
+                                res.status(200).send({
+                                    code: 200,
+                                    data: newAddress,
+                                    msg: 'Save successful!'
+                                })
+                            }
+                        })
+
+                    }
+
+                })
             }
         });
 

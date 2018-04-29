@@ -16,7 +16,7 @@ exports = module.exports = function(mongoose) {
         userPhone: {
             type: String,
             match: [/^1[34578]\d{9}$/, "invalid_phone"],
-            unique: true,
+            unique: false,
             required: false
         },
         province: {
