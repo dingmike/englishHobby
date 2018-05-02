@@ -90,7 +90,8 @@ exports.authenticate = function (req, res) {
 
 };
 exports.get = function (req, res) {
-    User.findOne({username: req.params.username}, function (err, user) {
+    let data = req.body;
+    User.findOne({_id: data.userId}, function (err, user) {
         if (err) {
             res.status(500).send('internal_server_error');
         } else {

@@ -55,23 +55,32 @@ exports = module.exports = function(mongoose) {
 
     // schema static method  //page fetch  one page has 5 default data
     AddressSchema.statics = {
-        fetch(id, pages, sortNum, cb) {
+        fetchByUserId(id, pages, sortNum, cb) {
             let pageSize = pages || 5;
             let sortKind = sortNum || -1;
             if (id) {
-                return this.find({'_id': {"$lt": id}})
-                    .select('_id createdAt nickname gender address phone money roles score readPages email isAnswerToday enableScore')
-                    .limit(pageSize)
-                    .sort({'_id': -1})
-                    .exec(cb);
+                return this.find({_creator: id}).populate({
+                    path: '_creator',
+                    select: {realName: true, address: true, username: true, phone: true}
+                }).populate({
+                    path: '_giftProduct',
+                    select: {giftTitle: true, giftIcon: true, expressFee: true, giftScore: true, giftPrice: true}  // // Explicitly exclude `_id`, see http://bit.ly/2aEfTdB select: 'name -_id',
+                }).sort({'createdAt': sortKind}).exec(cb);
             } else {
-                return this.find({})
-                    .select('_id createdAt nickname gender address phone money roles score readPages email isAnswerToday enableScore')
-                    .limit(pages)
-                    .sort({'_id': -1})
-                    .exec(cb);
+                res.send({   // ==res.json()
+                    code: 500,
+                    msg: '没有该用户的地址记录！'
+                });
             }
-
+        },
+        fetchAll(pages, sortNum, cb){
+            return this.find({}).populate({
+                path: '_creator',
+                select: {realName: true, address: true, username: true, email: true, phone: true, realAddress: true}
+            }).populate({
+                path: '_giftProduct',
+                select: {giftTitle: true, giftIcon: true, expressFee: true, giftScore: true, giftPrice: true,stock: true}  // // Explicitly exclude `_id`, see http://bit.ly/2aEfTdB select: 'name -_id',
+            }).sort({'createdAt': -1}).exec(cb);
         }
     };
 
