@@ -41,6 +41,12 @@ let config = {
         appSecret: '927fc61a9555028a6236e90ac7a68e8a', // my df5a5e6028b8fba20bfa79cefe893b4c   test 927fc61a9555028a6236e90ac7a68e8a
         // encodingAESKey: '927fc61a9555028a6236e90ac7a68e8a',
         checkSignature: false // 可选，默认为true。由于微信公众平台接口调试工具在明文模式下不发送签名，所以如要使用该测试工具，请将其设置为false
+    },
+    mysqlDBconfig:{
+        host     : 'localhost',
+        user     : 'root',
+        password : '1qazqaz1',
+        database : 'bbxvip_b2c'
     }
 };
 module.exports = config;

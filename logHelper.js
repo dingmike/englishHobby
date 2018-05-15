@@ -1,6 +1,7 @@
 
 /*
 * log4js日志记录
+* helper{writeDebug}
 *
 * */
 let helper = {};
@@ -49,7 +50,6 @@ helper.writeErr = function(msg, exp){
         msg += "\r\n" + exp;
     logErr.error(msg);
 };
-
 helper.writeRedis = function(msg){
     if(msg == null)
         msg = "";

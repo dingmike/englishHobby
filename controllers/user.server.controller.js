@@ -8,11 +8,14 @@ let requestIp = require('request-ip');
 let SECRET_TOKEN = "GUSTA_O0000";
 let jwtAuth = require('../app/libs/jwt');
 let util = require('../app/libs/util');
+let logger = require("../logHelper").helper;
+
+//mysql db
 
 exports.authenticate = function (req, res) {
     console.log('Start login in the system..............');
-    console.log('hjehe:' + req.is('application/json'))
-    console.log('IPREAL:' +  util.getClientIp(req))
+    console.log('hjehe:' + req.is('application/json'));
+    console.log('IPREAL:' +  util.getClientIp(req));
 
 
     console.log('Request IP :' +req.ip)
@@ -45,6 +48,7 @@ exports.authenticate = function (req, res) {
         // 用户名和email均可以登录
         User.findOne({"$or":[{username: req.body.username}, {email:req.body.username}]}, function (err, user) {
             if (err) {
+                logger.writeErr(err);
                 res.status(500).send(
                     {
                         code: 500,
@@ -56,6 +60,7 @@ exports.authenticate = function (req, res) {
                     //bcrypt.compareSync(req.body.password, user.password)
                     user.comparePassword(req.body.password, function (err, isMatch) {
                         if (err) {
+                            logger.writeErr(err);
                             return console.log(err)
                         }
                         // 密码不匹配
@@ -108,6 +113,7 @@ exports.test = function (req, res) {
     //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoiNWFjZWY4ZmJjOTM4ZDEzNDZjOTk1NGUwIiwiaWF0IjoxNTIzNTIxODUyLCJleHAiOjE1MjM3ODEwNTIsImhvc3QiOiI6OmZmZmY6MTkyLjE2OC4xNi4xOTgifQ.tQwu8ukAof2UMm-oApOPe6QfT2_bHiRS9t4G91n4nzE
     jwtAuth.getTokenAndVertify(req, res, function (err, token) {
         if (err) {
+            logger.writeErr(err);
             return res.status(403).send(err);
         }
         User.findOne({_id: token.id_user}, function (err, user) {
@@ -189,6 +195,7 @@ exports.signin = function (req, res) {
 
         User.findOne({"$or":[{username: data.username}, {email:data.email}]},function(err, userDoc){
             if (err) {
+                logger.writeErr(err);
                return res.status(500).send(err);
             }
             if(userDoc){
@@ -199,6 +206,7 @@ exports.signin = function (req, res) {
             } else {
                 userModel.save(function (err, user) {
                     if (err) {
+                        logger.writeErr(err);
                         res.status(500).send(err);
                     } else {
                         user.password = 'Haha, I will call 110!';
@@ -271,6 +279,7 @@ exports.UserAccess = function (perm) {
     return function (req, res, next) {
         getToken(req, function (err, token) {
             if (err) {
+                logger.writeErr(err);
                 return res.status(403).send(err);
             }
             // asegurando permiso de usuario en servidor

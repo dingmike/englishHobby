@@ -1,6 +1,6 @@
 {
   "appenders": {
-    "default": { "type": "dateFile", "filename": "logs/", "pattern":"yyyyMMddhh.log","alwaysIncludePattern":true},
+    "default": { "type": "dateFile", "filename": "logs/default/", "pattern":"yyyyMMddhh.log","alwaysIncludePattern":true},
     "logDebug": { "type": "dateFile", "filename": "logs/debug/","pattern":"yyyyMMddhh.log", "alwaysIncludePattern":true },
     "logInfo": { "type": "dateFile", "filename": "logs/info/","pattern":"yyyyMMddhh.log", "alwaysIncludePattern":true},
     "logWarn": { "type": "dateFile", "filename": "logs/warn/", "pattern":"yyyyMMddhh.log","alwaysIncludePattern":true},

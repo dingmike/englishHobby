@@ -1,6 +1,4 @@
-[2018-05-15T15:02:06.520] [INFO] logInfo - Express server listening on port 
-[2018-05-15T15:02:06.525] [INFO] logInfo - Express server listening on port 
-[2018-05-15T15:02:33.597] [INFO] logInfo - Express server listening on port 
-[2018-05-15T15:02:33.602] [INFO] logInfo - Express server listening on port 
-[2018-05-15T15:04:34.657] [INFO] logInfo - Express server listening on port 
-[2018-05-15T15:04:34.662] [INFO] logInfo - Express server listening on port 
+[2018-05-15T15:52:41.999] [INFO] logInfo - Express server listening on port 3311 with pid 9100 ServerSSL running at https://192.168.2.112:8080
+[2018-05-15T15:52:42.002] [INFO] logInfo - Express server listening on port 3311 with pid 9100 Servers running at http://192.168.2.112:3311
+[2018-05-15T15:55:53.762] [INFO] logInfo - Express server listening on port 3311 with pid 4572 ServerSSL running at https://192.168.2.112:8080
+[2018-05-15T15:55:53.765] [INFO] logInfo - Express server listening on port 3311 with pid 4572 Servers running at http://192.168.2.112:3311
