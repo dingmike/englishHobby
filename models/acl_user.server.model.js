@@ -1,5 +1,6 @@
 
-let uuid = require('node-uuid');
+// let uuid = require('node-uuid');
+let uuid = require('uuid');
 let uniqueValidator = require('mongoose-unique-validator');
 exports = module.exports = function(mongoose) {
     let Schema = mongoose.Schema;

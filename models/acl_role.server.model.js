@@ -1,5 +1,6 @@
 
-let uuid = require('node-uuid');
+// let uuid = require('node-uuid');
+let uuid = require('uuid');
 
 exports = module.exports = function(mongoose) {
     let Schema = mongoose.Schema;
