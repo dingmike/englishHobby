@@ -1,17 +1,16 @@
 const jwtAuth = require('../app/libs/jwt');
 
-
-module.exports = function(app, express, controllers) {
-  let user = express.Router();
-     // app.post('/testUser',controllers.user.authenticate);
+module.exports = function (app, express, controllers) {
+    let user = express.Router();
+    // app.post('/testUser',controllers.user.authenticate);
 
     user.route('/authenticate').post(controllers.user.authenticate);
     user.route('/test')
-            .post(jwtAuth.getTokenAndVertify, controllers.user.authenticate); // 验证token失效
+        .post(jwtAuth.getTokenAndVertify, controllers.user.authenticate); // 验证token失效
     user.route('/signin')
-            .post(controllers.user.signin)
-            .put(controllers.user.UserAccess(false),controllers.user.edit);
+        .post(controllers.user.signin)
+        .put(controllers.user.UserAccess(false), controllers.user.edit);
     user.route('/:username')
-            .get(controllers.user.get);
+        .get(controllers.user.get);
     app.use('/user', user);
 };

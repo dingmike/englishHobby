@@ -19,6 +19,11 @@ let express = require('express'),
 let io = socket_io();
 let getAccessToken = require('./libs/common');
 
+global.app = app;
+global.log = console.log;
+global.BASEPATH = __dirname;
+
+
 /**
  * Initialise log4js first, so we don't miss any log messages
  */
@@ -67,7 +72,7 @@ connection.connect(function (err) {
     }
     console.log('Mysql is connected as id ' + connection.threadId);
 });
-
+app.set('MysqlConn', connection);
 
 module.exports = (appdir, config, cb) => {
 
