@@ -3,13 +3,31 @@
   let cluster = require('cluster');
   let config = require('./config.js');
   let appSeverList = require('./app');
+  let log4js = require('log4js');
   let os = require('os'); // 多线程
+
+
+/**
+ * Initialise log4js first, so we don't miss any log messages
+ */
+// log4js.configure('./log4js.json');
+
+// var log = log4js.getLogger("startup");
+
+
+// system logs
+// let log = log4js.getLogger("appSeverList");
+// appSeverList.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'auto' }));
+
+
   let runServer = () => {
       appSeverList(process.cwd(), config, (app, apps) => {
-        apps.listen(config.SSLPORT,function () {
+        apps.listen(config.SSLPORT,function (err) {
+            // log.error("Something went wrong:", err);
             console.log('success serverssl................' + config.SSLPORT);
         }); //  servers监听端口 ssl
-        app.listen(config.porthttp,function () {
+        app.listen(config.porthttp,function (err) {
+            // log.error("Something went wrong:", err);
             console.log('success server...................' + config.porthttp);
         }) //  server监听端口
       });

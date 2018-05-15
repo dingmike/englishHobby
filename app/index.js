@@ -52,10 +52,23 @@
         }
     }));*/
 
+/**
+ * Initialise log4js first, so we don't miss any log messages
+ */
+// let log4js = require('log4js');
+// let log = require('../logHelper').helper;
+// let log = log4js.getLogger("startup");
+// app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'auto' }));
+var logger = require("../logHelper").helper;
+console.log(logger)
+//在日志中输出url请求
+// log.use(app);
 
 
-    module.exports = (appdir, config, cb) => {
-        app.dir = appdir;
+module.exports = (appdir, config, cb) => {
+
+
+    app.dir = appdir;
         console.log('cwd: ' +  appdir); //项目根目录
         // Setup HTTPS
         let options = {
@@ -63,7 +76,8 @@
             cert: fs.readFileSync(__dirname + '/../ssl/certificate.pem')
         };
         // things to do on each request
-        app.use((req, res, next) => {
+        app.use((err, req, res, next) => {
+            // log.error("Something went wrong:", err);
             // log each request in development/staging ENVironment
             if (config.debug) {
                 console.log(moment().format('HH:MM'), req.method, req.url,
@@ -87,6 +101,7 @@
 
         // Standard error handling
         app.use((err, req, res, next) => {
+            // log.error("Something went wrong:", err);
             console.error(err.stack);
             res.status(500).send('Something broke!');
             next();
@@ -128,12 +143,16 @@
 
         cb(server, servers);  // 启动服务器
         server.on('listening', function () {
+            logger.writeInfo('Express server listening on port ', server.address().port, " with pid ", process.pid );
+            // log.info('Express server listening on port ', server.address().port, " with pid ", process.pid );
             console.log('server config----------------------------------------');
           //  console.log(app)
             // console.log('Servers running at ' + (config.https ? 'https' : 'http') + '://' + app.get('ipaddr') + ':' + app.get('port'));
             console.log('Servers running at ' + 'http://' + app.get('ipaddr') + ':' + app.get('port'));
         });
         servers.on('listening', function () {
+            logger.writeInfo('Express server listening on port ', server.address().port, " with pid ", process.pid );
+            // log.info('Express server listening on port ', server.address().port, " with pid ", process.pid );
             console.log('serverssl config----------------------------------------');
            // console.log(app.get('env'))
             console.log('ServerSSL running at ' +  'https://' + app.get('ipaddr') + ':' + app.get('portSSL'));

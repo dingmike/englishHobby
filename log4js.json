@@ -1,0 +1,16 @@
+{
+  "appenders": {
+    "default": { "type": "dateFile", "filename": "logs/", "pattern":"yyyyMMddhh.log","alwaysIncludePattern":true},
+    "logDebug": { "type": "dateFile", "filename": "logs/debug/","pattern":"yyyyMMddhh.log", "alwaysIncludePattern":true },
+    "logInfo": { "type": "dateFile", "filename": "logs/info/","pattern":"yyyyMMddhh.log", "alwaysIncludePattern":true},
+    "logWarn": { "type": "dateFile", "filename": "logs/warn/", "pattern":"yyyyMMddhh.log","alwaysIncludePattern":true},
+    "logErr": { "type": "dateFile", "filename": "logs/err/", "pattern":"yyyyMMddhh.log","alwaysIncludePattern":true}
+  },
+  "categories": {
+    "logInfo": { "appenders": ["logInfo"], "level": "info"},
+    "logDebug": { "appenders": ["logDebug"], "level": "info" },
+    "logErr": { "appenders": ["logErr"], "level": "error" },
+    "logWarn": { "appenders": ["logWarn"], "level": "error" },
+    "default": { "appenders": ["default"], "level": "info" }
+  }
+}
