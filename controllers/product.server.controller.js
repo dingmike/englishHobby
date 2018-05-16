@@ -10,6 +10,7 @@ let util = require('../app/libs/util');
 
 
 /*
+*
 * @params name status recommendStatus categoryId characteristic
 * commission commissionType minPrice minScore numberGoodReputation originalPrice
 * pic stores
@@ -493,6 +494,10 @@ function getGoodsCategory(req, res) {
  * @param res
  */
 function getGoodsGroups(req, res) {
+
+    console.log('req.body: ' + req.body.pages);   // 取body内容数据
+    console.log('req.query: ' + req.query.pages); // 取参数req.query
+    let data = req.body;
     Sync(function () {
         try {
             var sql;
